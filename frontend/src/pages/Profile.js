@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const Profile = () => {
-    const user = JSON.parse(localStorage.getItem('user'));
-
+const Profile = ({ user, setUser }) => {
     // State for toggle (view/edit mode - logic to be added later)
     const [isEditing, setIsEditing] = useState(false);
 
@@ -38,7 +36,7 @@ const Profile = () => {
         };
 
         fetchUserData();
-    }, [user?.id]);
+    }, [user]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -64,9 +62,10 @@ const Profile = () => {
 
             await axios.put(`http://localhost:5000/api/auth/update-user/${user.id}`, body, config);
 
-            // Update local storage if needed (optional, but good for keeping basic info in sync)
+            // Update local storage and app state
             const updatedUser = { ...user, fullName: profileData.fullName, email: profileData.email };
-            localStorage.setItem('user', JSON.stringify(updatedUser)); // Only updating basic info in local storage for now
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+            setUser(updatedUser);
 
             setIsEditing(false);
             alert('Profile updated successfully!');
