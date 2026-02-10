@@ -29,7 +29,7 @@ const Login = ({ setUser }) => {
             localStorage.setItem('user', JSON.stringify(res.data.user)); // Store user data
             setUser(res.data.user); // Update App state
             alert('Login successful!');
-            navigate('/dashboard'); // Assuming dashboard route exists or will be created
+            navigate('/'); // Redirect to Home page after login
         } catch (err) {
             console.error(err);
             if (err.response) {
