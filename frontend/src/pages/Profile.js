@@ -12,7 +12,8 @@ const Profile = ({ user, setUser }) => {
         email: '',
         phoneNumber: '',
         location: 'Downtown District',
-        bio: 'Active citizen helping to improve our community through CleanStreet reporting.'
+        bio: 'Active citizen helping to improve our community through CleanStreet reporting.',
+        profilePicture: ''
     });
 
     useEffect(() => {
@@ -27,7 +28,8 @@ const Profile = ({ user, setUser }) => {
                         email: res.data.email,
                         phoneNumber: res.data.phoneNumber || '',
                         location: res.data.location || '',
-                        bio: res.data.bio || ''
+                        bio: res.data.bio || '',
+                        profilePicture: res.data.profilePicture || ''
                     }));
                 } catch (err) {
                     console.error("Error fetching user data:", err);
@@ -41,6 +43,37 @@ const Profile = ({ user, setUser }) => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setProfileData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('profileImage', file);
+
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            };
+
+            const res = await axios.post(`http://localhost:5000/api/auth/upload-profile-pic/${user.id}`, formData, config);
+
+            setProfileData(prev => ({ ...prev, profilePicture: res.data.file }));
+
+            // Update local storage user object if it contains profilePicture
+            const updatedUser = { ...user, profilePicture: res.data.file };
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+            setUser(updatedUser);
+
+            alert('Profile picture uploaded successfully!');
+        } catch (err) {
+            console.error("Error uploading image:", err);
+            const errorMsg = err.response?.data?.msg || err.response?.data?.error || err.message;
+            alert(`Failed to upload image: ${errorMsg}`);
+        }
     };
 
     const handleSave = async () => {
@@ -102,12 +135,24 @@ const Profile = ({ user, setUser }) => {
                     <div className="col-span-1">
                         <div className="bg-white shadow rounded-lg p-6 text-center">
                             <div className="relative inline-block">
-                                <div className="h-32 w-32 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-4xl font-bold mx-auto mb-4 border-4 border-white shadow-sm">
-                                    {getInitials(profileData.fullName)}
+                                <div className="h-32 w-32 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden border-4 border-white shadow-sm mx-auto mb-4">
+                                    {profileData.profilePicture ? (
+                                        <img src={profileData.profilePicture} alt="Profile" className="h-full w-full object-cover" />
+                                    ) : (
+                                        <span className="text-blue-600 text-4xl font-bold">{getInitials(profileData.fullName)}</span>
+                                    )}
                                 </div>
-                                <button className="absolute bottom-2 right-0 bg-white rounded-full p-2 shadow hover:bg-gray-50 border border-gray-200" title="Change Avatar">
+                                <label htmlFor="profileImage" className="absolute bottom-2 right-0 bg-white rounded-full p-2 shadow hover:bg-gray-50 border border-gray-200 cursor-pointer" title="Change Avatar">
                                     <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                </button>
+                                    <input
+                                        type="file"
+                                        id="profileImage"
+                                        name="profileImage"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={handleImageChange}
+                                    />
+                                </label>
                             </div>
 
                             <h2 className="text-xl font-bold text-gray-900">{profileData.fullName}</h2>

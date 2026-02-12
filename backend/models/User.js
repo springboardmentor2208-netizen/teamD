@@ -7,7 +7,11 @@ const userSchema = new mongoose.Schema({
     phoneNumber: { type: String, trim: true },
     password: { type: String, required: true, minlength: 6 },
     location: { type: String, trim: true, default: '' },
-    bio: { type: String, trim: true, default: '' }
+    bio: { type: String, trim: true, default: '' },
+    profilePicture: {
+        data: Buffer,
+        contentType: String
+    }
 }, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema);

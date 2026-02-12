@@ -7,6 +7,8 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 
+import Footer from './components/Footer';
+
 function App() {
     const [user, setUser] = useState(null);
 
@@ -57,6 +59,7 @@ function App() {
                         />
                     </Routes>
                 </main>
+                <Footer />
             </div>
         </Router>
     );
