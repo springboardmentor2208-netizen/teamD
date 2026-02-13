@@ -168,12 +168,6 @@ const Home = () => {
                     </div>
                 </div>
             </section>
-
-
-            {/* Footer (Optional simple footer) */}
-            <footer className="bg-gray-800 text-white py-8 text-center">
-                <p>&copy; {new Date().getFullYear()} CleanStreet. All rights reserved.</p>
-            </footer>
         </div>
     );
 };
