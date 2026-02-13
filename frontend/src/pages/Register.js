@@ -52,141 +52,192 @@ const Register = () => {
         }
     };
 
-    return (
-        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-            <div className="sm:mx-auto sm:w-full sm:max-w-md">
-                <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-                    <div className="sm:mx-auto sm:w-full sm:max-w-md mb-6">
-                        <h2 className="mt-6 text-center text-2xl font-bold text-gray-900">
-                            Register for CleanStreet
-                        </h2>
-                    </div>
+return (
+  <div
+    className="
+      min-h-screen flex flex-col justify-center items-center px-4
+      bg-gradient-to-r
+      from-blue-900 via-[#bdb5b5cc] to-indigo-900
+      bg-300%
+    "
+  >
+    <div className="w-full max-w-md">
 
-                    <form className="space-y-6" onSubmit={onSubmit}>
-                        {/* Full Name */}
-                        <div>
-                            <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
-                                Full Name
-                            </label>
-                            <div className="mt-1">
-                                <input
-                                    id="fullName"
-                                    name="fullName"
-                                    type="text"
-                                    autoComplete="name"
-                                    required
-                                    value={fullName}
-                                    onChange={onChange}
-                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                    placeholder="Enter your full name"
-                                />
-                            </div>
-                        </div>
+      {/* Glass Card */}
+      <div className="
+          bg-white/10
+          backdrop-blur-2xl
+          border border-white/20
+          shadow-2xl shadow-black/30
+          rounded-2xl
+          p-8
+      ">
 
-                        {/* Username */}
-                        <div>
-                            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                                Username
-                            </label>
-                            <div className="mt-1">
-                                <input
-                                    id="username"
-                                    name="username"
-                                    type="text"
-                                    autoComplete="username"
-                                    required
-                                    value={username}
-                                    onChange={onChange}
-                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                    placeholder="Choose a username"
-                                />
-                            </div>
-                        </div>
+        <h2 className="text-center text-2xl font-bold text-white mb-6">
+          Register for CleanStreet
+        </h2>
 
-                        {/* Email */}
-                        <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                                Email
-                            </label>
-                            <div className="mt-1">
-                                <input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    autoComplete="email"
-                                    required
-                                    value={email}
-                                    onChange={onChange}
-                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                    placeholder="Enter your email"
-                                />
-                            </div>
-                        </div>
+        <form className="space-y-5" onSubmit={onSubmit}>
 
-                        {/* Phone Number (Optional) */}
-                        <div>
-                            <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
-                                Phone Number <span className="text-gray-400 font-normal">(Optional)</span>
-                            </label>
-                            <div className="mt-1">
-                                <input
-                                    id="phoneNumber"
-                                    name="phoneNumber"
-                                    type="tel"
-                                    autoComplete="tel"
-                                    value={phoneNumber}
-                                    onChange={onChange}
-                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                    placeholder="Enter your phone number"
-                                />
-                            </div>
-                        </div>
+          {/* Full Name */}
+          <div>
+            <label className="block text-sm font-medium text-white/80">
+              Full Name
+            </label>
+            <input
+              id="fullName"
+              name="fullName"
+              type="text"
+              required
+              value={fullName}
+              onChange={onChange}
+              placeholder="Enter your full name"
+              className="
+                mt-1 w-full px-4 py-2
+                bg-white/20 border border-white/30
+                rounded-xl text-white
+                placeholder-white/60
+                backdrop-blur-md
+                focus:outline-none focus:ring-2 focus:ring-blue-400
+                transition
+              "
+            />
+          </div>
 
-                        {/* Password */}
-                        <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                                Password
-                            </label>
-                            <div className="mt-1">
-                                <input
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    autoComplete="new-password"
-                                    required
-                                    value={password}
-                                    onChange={onChange}
-                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                    placeholder="Create a password"
-                                />
-                            </div>
-                        </div>
+          {/* Username */}
+          <div>
+            <label className="block text-sm font-medium text-white/80">
+              Username
+            </label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              required
+              value={username}
+              onChange={onChange}
+              placeholder="Choose a username"
+              className="
+                mt-1 w-full px-4 py-2
+                bg-white/20 border border-white/30
+                rounded-xl text-white
+                placeholder-white/60
+                backdrop-blur-md
+                focus:outline-none focus:ring-2 focus:ring-blue-400
+                transition
+              "
+            />
+          </div>
 
-                        <div>
-                            <button
-                                type="submit"
-                                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                            >
-                                Register
-                            </button>
-                        </div>
-                    </form>
+          {/* Email */}
+          <div>
+            <label className="block text-sm font-medium text-white/80">
+              Email
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              value={email}
+              onChange={onChange}
+              placeholder="Enter your email"
+              className="
+                mt-1 w-full px-4 py-2
+                bg-white/20 border border-white/30
+                rounded-xl text-white
+                placeholder-white/60
+                backdrop-blur-md
+                focus:outline-none focus:ring-2 focus:ring-blue-400
+                transition
+              "
+            />
+          </div>
 
-                    <div className="mt-6">
-                        <div className="relative">
-                            <div className="relative flex justify-center text-sm">
-                                <span className="px-2 bg-white text-gray-500">
-                                    <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
-                                        Already have an account? Login
-                                    </Link>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          {/* Phone */}
+          <div>
+            <label className="block text-sm font-medium text-white/80">
+              Phone Number <span className="text-white/50">(Optional)</span>
+            </label>
+            <input
+              id="phoneNumber"
+              name="phoneNumber"
+              type="tel"
+              value={phoneNumber}
+              onChange={onChange}
+              placeholder="Enter your phone number"
+              className="
+                mt-1 w-full px-4 py-2
+                bg-white/20 border border-white/30
+                rounded-xl text-white
+                placeholder-white/60
+                backdrop-blur-md
+                focus:outline-none focus:ring-2 focus:ring-blue-400
+                transition
+              "
+            />
+          </div>
+
+          {/* Password */}
+          <div>
+            <label className="block text-sm font-medium text-white/80">
+              Password
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              value={password}
+              onChange={onChange}
+              placeholder="Create a password"
+              className="
+                mt-1 w-full px-4 py-2
+                bg-white/20 border border-white/30
+                rounded-xl text-white
+                placeholder-white/60
+                backdrop-blur-md
+                focus:outline-none focus:ring-2 focus:ring-blue-400
+                transition
+              "
+            />
+          </div>
+
+          {/* Button */}
+          <button
+            type="submit"
+            className="
+              w-full py-2 px-4
+              rounded-xl font-medium text-white
+              bg-blue-500/80
+              backdrop-blur-md
+              border border-white/20
+              hover:bg-blue-600
+              transition duration-300
+              shadow-lg shadow-blue-900/30
+            "
+          >
+            Register
+          </button>
+
+        </form>
+
+        {/* Login Link */}
+        <div className="mt-6 text-center">
+          <Link
+            to="/login"
+            className="text-white/70 hover:text-white transition"
+          >
+            Already have an account? Login
+          </Link>
         </div>
-    );
+
+      </div>
+
+    </div>
+  </div>
+);
+
 };
 
 export default Register;
