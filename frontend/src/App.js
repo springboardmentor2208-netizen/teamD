@@ -6,7 +6,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
-
+import Reports from './pages/Reports';
+import Complaints from './pages/Complaints';
 import Footer from './components/Footer';
 
 function App() {
@@ -51,11 +52,11 @@ function App() {
                         />
                         <Route
                             path="/report"
-                            element={user ? <div className="p-8 text-center text-xl">Report Issue Page (Coming Soon)</div> : <Navigate to="/login" />}
+                            element={user ? <Reports/> : <Navigate to="/login" />}
                         />
                         <Route
                             path="/complaints"
-                            element={user ? <div className="p-8 text-center text-xl">Complaints Page (Coming Soon)</div> : <Navigate to="/login" />}
+                            element={user ? <Complaints/> : <Navigate to="/login" />}
                         />
                     </Routes>
                 </main>

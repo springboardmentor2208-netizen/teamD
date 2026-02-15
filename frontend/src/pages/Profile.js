@@ -121,21 +121,23 @@ const Profile = ({ user, setUser }) => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen  bg-gradient-to-r 
+    from-blue-900 via-[#bdb5b5cc] to-indigo-900
+    bg-300% py-12 px-4 sm:px-6 lg:px-8 pt-[10vh]">
             <div className="max-w-5xl mx-auto">
                 <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900">Profile</h1>
-                    <p className="mt-1 text-sm text-gray-500">
+                    <h1 className="text-3xl font-bold text-gray-300">Profile</h1>
+                    <p className="mt-1 text-sm text-gray-300">
                         Manage your account information and preferences
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="grid  grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Left Column: User Card */}
                     <div className="col-span-1">
-                        <div className="bg-white shadow rounded-lg p-6 text-center">
+                        <div className="bg-[#ffffff5c] backdrop-blur-lg shadow rounded-lg p-6 text-center">
                             <div className="relative inline-block">
-                                <div className="h-32 w-32 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden border-4 border-white shadow-sm mx-auto mb-4">
+                                <div className="h-32 w-32 rounded-full bg-[#6fdff365] flex items-center justify-center overflow-hidden border-4 border-white shadow-sm mx-auto mb-4">
                                     {profileData.profilePicture ? (
                                         <img src={profileData.profilePicture} alt="Profile" className="h-full w-full object-cover" />
                                     ) : (
@@ -156,18 +158,18 @@ const Profile = ({ user, setUser }) => {
                             </div>
 
                             <h2 className="text-xl font-bold text-gray-900">{profileData.fullName}</h2>
-                            <p className="text-gray-500 text-sm mb-4">@{profileData.username}</p>
+                            <p className="text-gray-900 text-sm mb-4">@{profileData.username}</p>
 
                             <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 mb-6">
                                 Citizen
                             </span>
 
-                            <p className="text-gray-600 text-sm mb-6">
+                            <p className="text-gray-900 text-sm mb-6">
                                 {profileData.bio}
                             </p>
 
                             <div className="border-t border-gray-200 pt-4">
-                                <p className="text-xs text-gray-400">
+                                <p className="text-xs text-gray-900">
                                     Member since {new Date().toLocaleDateString()}
                                 </p>
                             </div>
@@ -176,7 +178,7 @@ const Profile = ({ user, setUser }) => {
 
                     {/* Right Column: Account Information */}
                     <div className="col-span-1 lg:col-span-2">
-                        <div className="bg-white shadow rounded-lg overflow-hidden">
+                        <div className="bg-[#ffffff5c] backdrop-blur-lg shadow rounded-lg overflow-hidden">
                             <div className="px-6 py-5 border-b border-gray-200 flex justify-between items-center">
                                 <div className="flex items-center">
                                     <div className="bg-blue-50 rounded-full p-2 mr-3">
@@ -184,14 +186,14 @@ const Profile = ({ user, setUser }) => {
                                     </div>
                                     <div>
                                         <h3 className="text-lg font-medium text-gray-900">Account Information</h3>
-                                        <p className="text-sm text-gray-500">Update your personal details</p>
+                                        <p className="text-sm text-gray-900">Update your personal details</p>
                                     </div>
                                 </div>
                                 <button
                                     onClick={() => setIsEditing(!isEditing)}
-                                    className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                    className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-900 bg-[#ffffff5c] backdrop-blur-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                                 >
-                                    <svg className="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                    <svg className="w-4 h-4 mr-2 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                     {isEditing ? 'Cancel' : 'Edit'}
                                 </button>
                             </div>
@@ -200,9 +202,9 @@ const Profile = ({ user, setUser }) => {
                                 <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {/* Username */}
                                     <div>
-                                        <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+                                        <label htmlFor="username" className="block text-sm font-medium text-gray-900 mb-1">
                                             <div className="flex items-center">
-                                                <svg className="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                                <svg className="w-4 h-4 mr-1 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                                                 Username
                                             </div>
                                         </label>
@@ -212,15 +214,15 @@ const Profile = ({ user, setUser }) => {
                                             id="username"
                                             disabled={true} // Usually username is immutable or hard to change
                                             value={profileData.username}
-                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-gray-50 text-gray-500 p-2 border"
+                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-[#ffffff5c] backdrop-blur-lg text-gray-500 p-2 border"
                                         />
                                     </div>
 
                                     {/* Email */}
                                     <div>
-                                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                                        <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-1">
                                             <div className="flex items-center">
-                                                <svg className="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                                <svg className="w-4 h-4 mr-1 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                                                 Email
                                             </div>
                                         </label>
@@ -236,7 +238,7 @@ const Profile = ({ user, setUser }) => {
 
                                     {/* Full Name */}
                                     <div>
-                                        <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
+                                        <label htmlFor="fullName" className="block text-sm font-medium text-gray-900 mb-1">
                                             Full Name
                                         </label>
                                         <input
@@ -246,15 +248,15 @@ const Profile = ({ user, setUser }) => {
                                             disabled={!isEditing}
                                             value={profileData.fullName}
                                             onChange={handleChange}
-                                            className={`block w-full rounded-md shadow-sm sm:text-sm p-2 border ${isEditing ? 'border-gray-300 focus:border-blue-500 focus:ring-blue-500' : 'bg-gray-50 border-gray-300 text-gray-500'}`}
+                                            className={`block w-full rounded-md shadow-sm sm:text-sm p-2 border ${isEditing ? 'border-gray-300 focus:border-blue-500 focus:ring-blue-500' : 'bg-[#ffffff5c] backdrop-blur-lg border-gray-300 text-gray-500'}`}
                                         />
                                     </div>
 
                                     {/* Phone Number */}
                                     <div>
-                                        <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">
+                                        <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-900 mb-1">
                                             <div className="flex items-center">
-                                                <svg className="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                                                <svg className="w-4 h-4 mr-1 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
                                                 Phone Number
                                             </div>
                                         </label>
@@ -265,15 +267,15 @@ const Profile = ({ user, setUser }) => {
                                             disabled={!isEditing}
                                             value={profileData.phoneNumber}
                                             onChange={handleChange}
-                                            className={`block w-full rounded-md shadow-sm sm:text-sm p-2 border ${isEditing ? 'border-gray-300 focus:border-blue-500 focus:ring-blue-500' : 'bg-gray-50 border-gray-300 text-gray-500'}`}
+                                            className={`block w-full rounded-md shadow-sm sm:text-sm p-2 border ${isEditing ? 'border-gray-300 focus:border-blue-500 focus:ring-blue-500' : 'bg-[#ffffff5c] backdrop-blur-lg border-gray-300 text-gray-500'}`}
                                         />
                                     </div>
 
                                     {/* Location */}
                                     <div>
-                                        <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1">
+                                        <label htmlFor="location" className="block text-sm font-medium text-gray-900 mb-1">
                                             <div className="flex items-center">
-                                                <svg className="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                                <svg className="w-4 h-4 mr-1 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                                                 Location
                                             </div>
                                         </label>
@@ -284,13 +286,13 @@ const Profile = ({ user, setUser }) => {
                                             disabled={!isEditing}
                                             value={profileData.location}
                                             onChange={handleChange}
-                                            className={`block w-full rounded-md shadow-sm sm:text-sm p-2 border ${isEditing ? 'border-gray-300 focus:border-blue-500 focus:ring-blue-500' : 'bg-gray-50 border-gray-300 text-gray-500'}`}
+                                            className={`block w-full rounded-md shadow-sm sm:text-sm p-2 border ${isEditing ? 'border-gray-300 focus:border-blue-500 focus:ring-blue-500' : 'bg-[#ffffff5c] backdrop-blur-lg border-gray-300 text-gray-500'}`}
                                         />
                                     </div>
 
                                     {/* Bio */}
                                     <div className="md:col-span-2">
-                                        <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-1">
+                                        <label htmlFor="bio" className="block text-sm font-medium text-gray-900 mb-1">
                                             Bio
                                         </label>
                                         <textarea
@@ -300,17 +302,17 @@ const Profile = ({ user, setUser }) => {
                                             disabled={!isEditing}
                                             value={profileData.bio}
                                             onChange={handleChange}
-                                            className={`block w-full rounded-md shadow-sm sm:text-sm p-2 border ${isEditing ? 'border-gray-300 focus:border-blue-500 focus:ring-blue-500' : 'bg-gray-50 border-gray-300 text-gray-500'}`}
+                                            className={`block w-full rounded-md shadow-sm sm:text-sm p-2 border ${isEditing ? 'border-gray-300 focus:border-blue-500 focus:ring-blue-500' : 'bg-[#ffffff5c] backdrop-blur-lg border-gray-300 text-gray-500'}`}
                                         ></textarea>
                                     </div>
                                 </form>
                             </div>
 
                             {isEditing && (
-                                <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end">
+                                <div className="px-6 py-4 border-t border-gray-200 flex justify-end">
                                     <button
                                         onClick={() => setIsEditing(false)}
-                                        className="mr-3 inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                        className="mr-3 inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-900 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                                     >
                                         Cancel
                                     </button>
