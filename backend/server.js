@@ -14,7 +14,15 @@ mongoose.connect(process.env.MONGO_URI)
     .catch(err => console.log("MongoDB Error:", err.message));
 
 app.use("/api/auth", require("./routes/auth"));
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/complaints", require("./routes/complaints"));
+app.use("/api/votes", require("./routes/votes"));
+app.use("/api/comments", require("./routes/comments"));
+app.use("/api/admin", require("./routes/admin"));
+
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
+
