@@ -25,7 +25,7 @@ const Navbar = ({ user, onLogout }) => {
   return (
     <nav ref={navRef} className="sticky top-0 z-50 bg-gray-900 text-white shadow">
 
-      <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+      <div className="w-full px-6 py-3 flex justify-between items-center">
 
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 group">
@@ -53,7 +53,7 @@ const Navbar = ({ user, onLogout }) => {
 
           {!user && (
             <>
-              <Link to="/login">Login</Link>
+              <Link to="/login" className="bg-blue-600 px-4 py-2 rounded">Login</Link>
               <Link to="/register" className="bg-blue-600 px-4 py-2 rounded">
                 Register
               </Link>
