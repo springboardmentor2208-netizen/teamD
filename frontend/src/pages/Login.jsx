@@ -46,7 +46,7 @@ const Login = ({ setUser }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-blue-300 flex items-center justify-center">
       <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
 
         <h2 className="text-2xl font-bold text-center mb-6">

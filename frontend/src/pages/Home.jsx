@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Home = () => {
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col bg-gradient-to-br from-blue-100 to-blue-300 min-h-screen">
             {/* Hero Section */}
             <header className="bg-blue-600 text-white flex-grow flex flex-col justify-center items-center text-center px-4 py-20 lg:py-32">
                 <div className="max-w-4xl mx-auto">
