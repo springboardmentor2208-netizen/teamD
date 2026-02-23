@@ -6,6 +6,10 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
+import ReportComplaint from "./pages/ReportComplaint";
+import Complaints from "./pages/Complaints";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
     const [user, setUser] = useState(null);
@@ -47,14 +51,17 @@ function App() {
                             path="/profile"
                             element={user ? <Profile user={user} setUser={setUser} /> : <Navigate to="/login" />}
                         />
+                        
                         <Route
                             path="/report"
-                            element={user ? <div className="p-8 text-center text-xl">Report Issue Page (Coming Soon)</div> : <Navigate to="/login" />}
+                            element={user ? <ReportComplaint /> : <Navigate to="/login" />}
                         />
                         <Route
                             path="/complaints"
-                            element={user ? <div className="p-8 text-center text-xl">Complaints Page (Coming Soon)</div> : <Navigate to="/login" />}
+                            element={user ? <Complaints /> : <Navigate to="/login" />}
                         />
+                        <Route path="/forgot-password" element={<ForgotPassword/>}/>
+                        <Route path="/reset-password/:token" element={<ResetPassword/>}/>
                     </Routes>
                 </main>
             </div>

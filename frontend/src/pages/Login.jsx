@@ -81,6 +81,10 @@ const Login = ({ setUser }) => {
 
         </form>
 
+        <Link to="/forgot-password" className="text-sm text-blue-600">
+          Forgot Password?
+        </Link>
+
         <p className="text-center mt-4 text-sm">
           New user?{" "}
           <Link to="/register" className="text-blue-600">

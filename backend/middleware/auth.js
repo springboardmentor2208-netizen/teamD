@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("/Users/jimin/Documents/infosys/Civic-Issue-Project/backend/middleware/auth..js");
+const User = require("../models/User");
 
 exports.protect = async (req, res, next) => {
   try {
@@ -23,6 +23,7 @@ exports.protect = async (req, res, next) => {
     next();
 
   } catch (error) {
+    console.error(error);
     res.status(401).json({ message: "Token invalid" });
   }
 };

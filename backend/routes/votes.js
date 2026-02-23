@@ -1,46 +1,51 @@
 const router = require("express").Router();
 const Vote = require("../models/Vote");
-const { protect } = require("/Users/jimin/Documents/infosys/Civic-Issue-Project/backend/middleware/auth..js");
+const { protect } = require("../middleware/auth");
 
+// Create or update vote
+router.post("/:complaintId", protect, async (req, res) => {
+  try {
+    const { vote_type } = req.body;
 
+    if (!["upvote", "downvote"].includes(vote_type)) {
+      return res.status(400).json({ message: "Invalid vote type" });
+    }
 
-router.post("/", protect, async (req, res) => {
-  const { complaint_id, vote_type } = req.body;
+    const vote = await Vote.findOneAndUpdate(
+      {
+        user_id: req.user.id,
+        complaint_id: req.params.complaintId
+      },
+      { vote_type },
+      { upsert: true, new: true }
+    );
 
-  const existing = await Vote.findOne({
-    user_id: req.user.id,
-    complaint_id
-  });
+    res.json(vote);
 
-  if (existing) {
-    existing.vote_type = vote_type;
-    await existing.save();
-    return res.json(existing);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
-
-  const vote = await Vote.create({
-    user_id: req.user.id,
-    complaint_id,
-    vote_type
-  });
-
-  res.status(201).json(vote);
 });
 
 
-
+// Get vote count for complaint
 router.get("/:complaintId", async (req, res) => {
-  const upvotes = await Vote.countDocuments({
-    complaint_id: req.params.complaintId,
-    vote_type: "upvote"
-  });
+  try {
+    const upvotes = await Vote.countDocuments({
+      complaint_id: req.params.complaintId,
+      vote_type: "upvote"
+    });
 
-  const downvotes = await Vote.countDocuments({
-    complaint_id: req.params.complaintId,
-    vote_type: "downvote"
-  });
+    const downvotes = await Vote.countDocuments({
+      complaint_id: req.params.complaintId,
+      vote_type: "downvote"
+    });
 
-  res.json({ upvotes, downvotes });
+    res.json({ upvotes, downvotes });
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 module.exports = router;

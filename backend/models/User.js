@@ -11,7 +11,9 @@ const userSchema = new mongoose.Schema({
   enum: ["user", "volunteer", "admin"],
   default: "user"
 },
-  profilePhoto: String
+  profilePhoto: String,
+  resetPasswordToken: String,
+  resetPasswordExpire: Date
 },{timestamps:true});
 
 module.exports = mongoose.model("User", userSchema);

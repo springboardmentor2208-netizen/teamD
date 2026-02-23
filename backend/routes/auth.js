@@ -2,6 +2,8 @@ const router = require("express").Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+const sendMail = require("../utils/sendMail");
 
 router.post("/register", async (req, res) => {
   try {
@@ -113,6 +115,50 @@ router.put("/update-user/:id", async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+});
+
+router.post("/reset-password/:token", async (req,res)=>{
+
+ const resetToken = crypto.createHash("sha256").update(req.params.token).digest("hex");
+
+ const user = await User.findOne({
+   resetPasswordToken:resetToken,
+   resetPasswordExpire:{$gt:Date.now()}
+ });
+
+ if(!user) return res.status(400).json({message:"Token expired"});
+
+ user.password = await bcrypt.hash(req.body.password,10);
+ user.resetPasswordToken=undefined;
+ user.resetPasswordExpire=undefined;
+
+ await user.save();
+
+ res.json({message:"Password updated"});
+});
+
+router.post("/forgot-password", async (req,res)=>{
+
+ const user = await User.findOne({ email:req.body.email });
+
+ if(!user) return res.json({message:"If email exists, reset sent"});
+
+ const token = crypto.randomBytes(20).toString("hex");
+
+ user.resetPasswordToken = crypto.createHash("sha256").update(token).digest("hex");
+ user.resetPasswordExpire = Date.now()+15*60*1000;
+
+ await user.save();
+
+ const link = `http://localhost:3000/reset-password/${token}`;
+
+ await sendMail(
+   user.email,
+   "Reset Password",
+   `<h3>Click below</h3><a href="${link}">${link}</a>`
+ );
+
+ res.json({message:"Reset link sent"});
 });
 
 module.exports = router;

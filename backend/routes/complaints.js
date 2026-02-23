@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const Complaint = require("../models/Complaint");
 const AdminLog = require("../models/Admin");
-const { protect, adminOnly } = require("/Users/jimin/Documents/infosys/Civic-Issue-Project/backend/middleware/auth..js");
-
+const { protect, adminOnly } = require("/Users/jimin/Documents/infosys/teamD/backend/middleware/auth.js");
+const Vote = require("../models/Vote");
 
 
 router.post("/", protect, async (req, res) => {
@@ -38,11 +38,36 @@ router.post("/", protect, async (req, res) => {
 
 
 router.get("/", async (req, res) => {
-  const complaints = await Complaint.find()
-    .populate("user_id", "fullName email")
-    .sort({ createdAt: -1 });
+  try {
+    const complaints = await Complaint.find()
+      .populate("user_id", "fullName email profilePhoto")
+      .sort({ createdAt: -1 });
 
-  res.json(complaints);
+    const enriched = await Promise.all(
+      complaints.map(async c => {
+        const upvotes = await Vote.countDocuments({
+          complaint_id: c._id,
+          vote_type: "upvote"
+        });
+
+        const downvotes = await Vote.countDocuments({
+          complaint_id: c._id,
+          vote_type: "downvote"
+        });
+
+        return {
+          ...c.toObject(),
+          upvotes,
+          downvotes
+        };
+      })
+    );
+
+    res.json(enriched);
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 
