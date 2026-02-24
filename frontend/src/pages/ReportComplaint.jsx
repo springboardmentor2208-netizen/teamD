@@ -3,7 +3,7 @@ import axios from "axios";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-
+import API from "../api/axios";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
@@ -18,13 +18,27 @@ L.Icon.Default.mergeOptions({
 });
 
 
-const LocationPicker = ({ setCoords }) => {
+const LocationPicker = ({ setCoords, setForm }) => {
   useMapEvents({
-    click(e) {
-      setCoords({
-        lat: e.latlng.lat,
-        lng: e.latlng.lng
-      });
+    async click(e) {
+      const { lat, lng } = e.latlng;
+      setCoords({ lat, lng });
+
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`
+        );
+        const data = await response.json();
+        
+        if (data.display_name) {
+          setForm(prev => ({
+            ...prev,
+            address: data.display_name
+          }));
+        }
+      } catch (err) {
+        console.error(err);
+      }
     }
   });
   return null;
@@ -47,47 +61,14 @@ const ReportComplaint = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const submitComplaint = async e => {
-    e.preventDefault();
-
-    if (!form.title || !form.description || !form.address) {
-      alert("Please fill required fields");
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      await axios.post(
-        "http://localhost:8000/api/complaints",
-        {
-          ...form,
-          location_coords: coords
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
-
-      alert("Complaint submitted successfully!");
-
-      setForm({
-        title: "",
-        description: "",
-        address: "",
-        photo: ""
-      });
-
-      setCoords(null);
-
-    } catch (err) {
-      alert(err.response?.data?.message || "Submission failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+const submitComplaint = async (formData) => {
+  try {
+    await API.post("/complaints", formData);
+    alert("Submitted!");
+  } catch (err) {
+    alert("Error");
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-blue-300 py-10">
@@ -134,8 +115,7 @@ const ReportComplaint = () => {
           />
 
           {/* MAP */}
-          <div className="h-64 rounded overflow-hidden border">
-
+         <div className="h-64 rounded overflow-hidden border">
             <MapContainer
               center={[17.385044, 78.486671]}
               zoom={13}
@@ -143,13 +123,11 @@ const ReportComplaint = () => {
             >
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-              <LocationPicker setCoords={setCoords} />
+              <LocationPicker setCoords={setCoords} setForm={setForm} />
 
               {coords && <Marker position={[coords.lat, coords.lng]} />}
-
             </MapContainer>
-
-          </div>
+        </div>
 
           <p className="text-sm text-gray-500">
             Click on map to select exact location

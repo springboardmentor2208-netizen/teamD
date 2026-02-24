@@ -2,7 +2,7 @@ const router = require("express").Router();
 const Complaint = require("../models/Complaint");
 const User = require("../models/User");
 const AdminLog = require("../models/Admin");
-const { protect, adminOnly } = require("/Users/jimin/Documents/infosys/teamD/backend/middleware/auth.js");
+const { protect, adminOnly } = require("../middleware/auth.js");
 
 
 

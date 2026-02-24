@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sendMail = require("../utils/sendMail");
-
+const sendOTP = require("../utils/sendOTP");
 router.post("/register", async (req, res) => {
   try {
     const {
@@ -117,48 +117,59 @@ router.put("/update-user/:id", async (req, res) => {
   }
 });
 
-router.post("/reset-password/:token", async (req,res)=>{
 
- const resetToken = crypto.createHash("sha256").update(req.params.token).digest("hex");
+router.post("/reset-password", async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
 
- const user = await User.findOne({
-   resetPasswordToken:resetToken,
-   resetPasswordExpire:{$gt:Date.now()}
- });
+  
+    const user = await User.findOne({
+      email,
+      resetOTP: otp,
+      resetOTPExpire: { $gt: Date.now() }
+    });
 
- if(!user) return res.status(400).json({message:"Token expired"});
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
 
- user.password = await bcrypt.hash(req.body.password,10);
- user.resetPasswordToken=undefined;
- user.resetPasswordExpire=undefined;
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters" });
+    }
 
- await user.save();
+  
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
 
- res.json({message:"Password updated"});
+
+    user.resetOTP = null;
+    user.resetOTPExpire = null;
+
+    await user.save();
+
+    res.json({ message: "Password changed successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 router.post("/forgot-password", async (req,res)=>{
 
- const user = await User.findOne({ email:req.body.email });
+  const { email } = req.body;
 
- if(!user) return res.json({message:"If email exists, reset sent"});
+  const user = await User.findOne({ email });
+  if(!user) return res.status(400).json({message:"User not found"});
 
- const token = crypto.randomBytes(20).toString("hex");
+  const otp = Math.floor(100000 + Math.random()*900000).toString();
 
- user.resetPasswordToken = crypto.createHash("sha256").update(token).digest("hex");
- user.resetPasswordExpire = Date.now()+15*60*1000;
+  user.resetOTP = otp;
+  user.resetOTPExpire = Date.now() + 10*60*1000;
 
- await user.save();
+  await user.save();
 
- const link = `http://localhost:3000/reset-password/${token}`;
+  await sendOTP(email, otp);
 
- await sendMail(
-   user.email,
-   "Reset Password",
-   `<h3>Click below</h3><a href="${link}">${link}</a>`
- );
-
- res.json({message:"Reset link sent"});
+  res.json({ message:"OTP sent to email" });
 });
 
 module.exports = router;

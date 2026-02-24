@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Comment = require("../models/Comment");
-const { protect } = require("/Users/jimin/Documents/infosys/teamD/backend/middleware/auth.js");
+const { protect } = require("../middleware/auth.js");
 
 
 
