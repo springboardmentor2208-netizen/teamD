@@ -15,8 +15,10 @@ module.exports = async (email, otp) => {
     to: email,
     subject: "Password Reset OTP",
     html: `
-      <h2>Your OTP</h2>
+      <h2>Your OTP for CleanStreet reseting Password</h2>
       <h1>${otp}</h1>
+      <p>If you did not request this, please ignore this email.</p>
+      <p>Do not share this OTP with anyone.</p>
       <p>Expires in 10 minutes</p>
     `
   });

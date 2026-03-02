@@ -106,4 +106,18 @@ router.put("/:id/assign", protect, adminOnly, async (req, res) => {
   res.json(complaint);
 });
 
+router.get("/my-complaints", protect, async (req, res) => {
+  try {
+   
+    const complaints = await Complaint.find({ user_id: req.user._id })
+      .sort({ createdAt: -1 });
+
+    console.log(`Found ${complaints.length} complaints for user ${req.user._id}`);
+    res.json(complaints);
+  } catch (err) {
+    console.error("Dashboard Fetch Error:", err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
 module.exports = router;
