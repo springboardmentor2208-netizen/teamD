@@ -9,7 +9,7 @@ const Navbar = ({ user, onLogout }) => {
   const navRef = useRef();
   const navigate = useNavigate();
 
-  
+
   useEffect(() => {
     const handler = e => {
       if (navRef.current && !navRef.current.contains(e.target)) {
@@ -43,8 +43,12 @@ const Navbar = ({ user, onLogout }) => {
             <Link to="/dashboard">Dashboard</Link>
             <Link to="/report">Report</Link>
             <Link to="/complaints">Complaints</Link>
-
-            {user.role === "admin" && <Link to="/admin">Admin</Link>}
+            {user?.role === "volunteer" && (
+              <Link to="/my-tasks" className="text-blue-600 font-bold underline">
+                My Tasks
+              </Link>
+            )}
+            {user.role === "admin" && <Link to="/admin-panel">Admin</Link>}
           </div>
         )}
 
@@ -77,54 +81,54 @@ const Navbar = ({ user, onLogout }) => {
               </button>
 
               {/* Profile Dropdown */}
-             {profileOpen && (
-  <div className="absolute right-0 mt-3 w-52 bg-white text-gray-800 rounded-xl shadow-xl border overflow-hidden animate-fade">
+              {profileOpen && (
+                <div className="absolute right-0 mt-3 w-52 bg-white text-gray-800 rounded-xl shadow-xl border overflow-hidden animate-fade">
 
-    <button
-      onClick={() => {
-        navigate("/profile");
-        setProfileOpen(false);
-      }}
-      className="w-full text-left px-4 py-3 hover:bg-gray-100 transition"
-    >
-      👤 Profile
-    </button>
+                  <button
+                    onClick={() => {
+                      navigate("/profile");
+                      setProfileOpen(false);
+                    }}
+                    className="w-full text-left px-4 py-3 hover:bg-gray-100 transition"
+                  >
+                    👤 Profile
+                  </button>
 
-    <button
-      onClick={() => {
-        navigate("/dashboard");
-        setProfileOpen(false);
-      }}
-      className="w-full text-left px-4 py-3 hover:bg-gray-100 transition"
-    >
-      📊 Dashboard
-    </button>
+                  <button
+                    onClick={() => {
+                      navigate("/dashboard");
+                      setProfileOpen(false);
+                    }}
+                    className="w-full text-left px-4 py-3 hover:bg-gray-100 transition"
+                  >
+                    📊 Dashboard
+                  </button>
 
-    {user.role === "admin" && (
-      <button
-        onClick={() => {
-          navigate("/admin");
-          setProfileOpen(false);
-        }}
-        className="w-full text-left px-4 py-3 hover:bg-gray-100 transition"
-      >
-        🛠 Admin Panel
-      </button>
-    )}
+                  {user.role === "admin" && (
+                    <button
+                      onClick={() => {
+                        navigate("/admin");
+                        setProfileOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-3 hover:bg-gray-100 transition"
+                    >
+                      🛠 Admin Panel
+                    </button>
+                  )}
 
-    <div className="border-t">
+                  <div className="border-t">
 
-      <button
-        onClick={onLogout}
-        className="w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 transition"
-      >
-        🚪 Logout
-      </button>
+                    <button
+                      onClick={onLogout}
+                      className="w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 transition"
+                    >
+                      🚪 Logout
+                    </button>
 
-    </div>
+                  </div>
 
-  </div>
-)}
+                </div>
+              )}
 
             </div>
           )}
@@ -132,13 +136,13 @@ const Navbar = ({ user, onLogout }) => {
           {/* Hamburger */}
           {user && (
             <button
-  onClick={() => setMenuOpen(!menuOpen)}
-  className="md:hidden flex flex-col justify-center items-center w-8 h-8 gap-1"
->
-  <span className={`h-0.5 w-6 bg-white transition ${menuOpen && "rotate-45 translate-y-2"}`} />
-  <span className={`h-0.5 w-6 bg-white transition ${menuOpen && "opacity-0"}`} />
-  <span className={`h-0.5 w-6 bg-white transition ${menuOpen && "-rotate-45 -translate-y-2"}`} />
-</button>
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="md:hidden flex flex-col justify-center items-center w-8 h-8 gap-1"
+            >
+              <span className={`h-0.5 w-6 bg-white transition ${menuOpen && "rotate-45 translate-y-2"}`} />
+              <span className={`h-0.5 w-6 bg-white transition ${menuOpen && "opacity-0"}`} />
+              <span className={`h-0.5 w-6 bg-white transition ${menuOpen && "-rotate-45 -translate-y-2"}`} />
+            </button>
           )}
 
         </div>
