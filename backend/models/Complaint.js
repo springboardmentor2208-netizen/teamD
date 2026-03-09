@@ -10,6 +10,34 @@ const complaintSchema = new mongoose.Schema({
   assigned_to: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
   status: { type: String, enum: ["received", "in_review", "resolved"], default: "received" },
   remarks: { type: String, default: "" }
-}, { timestamps: true });
+}, { 
+  timestamps: true,
+  toJSON: { virtuals: true }, 
+  toObject: { virtuals: true } 
+});
+
+
+complaintSchema.virtual('comments', {
+  ref: 'Comment',              
+  localField: '_id',            
+  foreignField: 'complaint_id'  
+});
+
+complaintSchema.virtual('upvotes', {
+  ref: 'Vote',
+  localField: '_id',
+  foreignField: 'complaint_id',
+  count: true, 
+  match: { vote_type: 'upvote' } 
+});
+
+
+complaintSchema.virtual('downvotes', {
+  ref: 'Vote',
+  localField: '_id',
+  foreignField: 'complaint_id',
+  count: true,
+  match: { vote_type: 'downvote' }
+});
 
 module.exports = mongoose.model("Complaint", complaintSchema);

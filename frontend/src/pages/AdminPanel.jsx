@@ -13,7 +13,7 @@ const AdminPanel = () => {
   const fetchInitialData = async () => {
     try {
       setLoading(true);
-      // Fetch both complaints and volunteers at once
+      
       const [compRes, volRes] = await Promise.all([
         API.get("/complaints"), 
         API.get("/complaints/volunteers")
@@ -32,7 +32,7 @@ const AdminPanel = () => {
     try {
       await API.put(`/complaints/${complaintId}/assign`, { volunteerId });
       alert("Volunteer assigned successfully!");
-      fetchInitialData(); // Refresh list to show updated status/assignment
+      fetchInitialData(); 
     } catch (err) {
       alert("Assignment failed");
     }

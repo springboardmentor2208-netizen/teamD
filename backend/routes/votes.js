@@ -2,7 +2,6 @@ const router = require("express").Router();
 const Vote = require("../models/Vote");
 const { protect } = require("../middleware/auth");
 
-// Create or update vote
 router.post("/:complaintId", protect, async (req, res) => {
   try {
     const { vote_type } = req.body;
@@ -28,7 +27,7 @@ router.post("/:complaintId", protect, async (req, res) => {
 });
 
 
-// Get vote count for complaint
+
 router.get("/:complaintId", async (req, res) => {
   try {
     const upvotes = await Vote.countDocuments({
