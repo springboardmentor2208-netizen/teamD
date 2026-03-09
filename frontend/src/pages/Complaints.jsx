@@ -69,7 +69,7 @@ const Complaints = () => {
     }
   };
 
-  const handleVote = async (complaintId, type) => {
+  const handleVote = async (complaintId, type,e) => {
     try {
       await API.post(`/votes/${complaintId}`, { vote_type: type });
       await fetchComplaints(); 
