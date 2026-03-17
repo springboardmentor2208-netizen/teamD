@@ -27,7 +27,8 @@ router.post("/", protect, async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const complaints = await Complaint.find()
-      .populate("user_id", "fullName")
+      .populate("user_id", "fullName") 
+      .populate("assigned_to", "fullName") 
       .populate("upvotes")    
       .populate("downvotes")  
       .populate({

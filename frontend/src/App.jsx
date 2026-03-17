@@ -12,6 +12,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import AdminPanel from "./pages/AdminPanel";
 import VolunteerDashboard from "./pages/VolunteerDashboard";
+import VolunteerTasks from "./pages/VolunteerTasks";
 
 function App() {
     const [user, setUser] = useState(null);
@@ -66,6 +67,7 @@ function App() {
                         <Route path="/reset-password/:token" element={<ResetPassword/>}/>
                         <Route path="/admin-panel" element={<AdminPanel />} />
                         <Route path="/volunteer-dashboard" element={<VolunteerDashboard />} />
+                        <Route path="/my-tasks" element={<VolunteerTasks />} />
                     </Routes>
                 </main>
             </div>
