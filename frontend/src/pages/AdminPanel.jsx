@@ -100,12 +100,11 @@ const AdminPanel = () => {
         {/* HEADER SECTION */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
           <div>
-            <h1 className="text-4xl font-black tracking-tighter italic">Homease Admin</h1>
-            <p className="text-gray-400 font-bold uppercase text-[9px] tracking-[0.2em] mt-1">Milestone 4: Governance Panel</p>
+            <h1 className="text-4xl font-black tracking-tighter italic">CleanStreet Admin</h1>
           </div>
           <input 
             type="text" 
-            placeholder={`Filter ${activeTab}...`} 
+            placeholder={`Search ${activeTab}...`} 
             className="bg-white border-2 border-gray-100 rounded-2xl px-6 py-3 text-sm focus:border-black outline-none shadow-sm w-full md:w-80 transition-all font-medium"
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -128,7 +127,7 @@ const AdminPanel = () => {
             </div>
           </div>
 
-          <div className="bg-black rounded-[2.5rem] p-9 text-white flex flex-col justify-center shadow-2xl">
+          <div className=" bg-white rounded-[2.5rem] p-9 flex flex-col justify-center shadow-2xl">
             <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-50 mb-2">
                {activeTab === "logs" ? "Security Audit" : "System Volume"}
             </p>
