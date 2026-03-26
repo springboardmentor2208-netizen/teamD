@@ -12,4 +12,4 @@ const adminLogSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("AdminLog", adminLogSchema);
+module.exports = mongoose.model("Admin", adminLogSchema);

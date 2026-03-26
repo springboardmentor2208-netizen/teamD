@@ -40,7 +40,7 @@ const VolunteerTasks = () => {
   if (loading) return <div className="p-10 text-center">Loading your tasks...</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 p-6 bg-gradient-to-br from-blue-100 to-blue-300">
       <h1 className="text-2xl font-bold mb-6 text-blue-900">Volunteer Assignments</h1>
 
       {tasks.length === 0 ? (

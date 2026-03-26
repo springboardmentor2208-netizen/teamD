@@ -86,7 +86,7 @@ const ReportComplaint = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-10 px-4">
+    <div className="min-h-screen bg-gray-100 py-10 px-4 bg-gradient-to-br from-blue-100 to-blue-300">
       <div className="max-w-3xl mx-auto bg-white shadow rounded-xl p-8">
         <h2 className="text-2xl font-bold mb-6 text-center">Report Issue</h2>
         <form onSubmit={submitComplaint} className="space-y-4">

@@ -125,7 +125,7 @@ const Complaints = () => {
   if (loading) return <div className="h-screen flex items-center justify-center font-bold text-blue-600">Updating Feed...</div>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-10 px-4 md:px-10 font-sans">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-blue-300 py-10 px-4 md:px-10 font-sans">
       <div className="max-w-6xl mx-auto">
         
         {/* Header & Advanced Controls */}

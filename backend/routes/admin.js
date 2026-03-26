@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const Complaint = require("../models/Complaint");
 const User = require("../models/User");
-const AdminLog = require("../models/Admin");
+const Admin = require("../models/Admin");
 const { protect, adminOnly } = require("../middleware/auth.js");
+const AdminLog = require("../models/AdminLog");
 
 // 1. DASHBOARD STATS (For the Bar Graph)
 router.get("/stats", protect, adminOnly, async (req, res) => {
@@ -24,6 +25,17 @@ router.get("/stats", protect, adminOnly, async (req, res) => {
   }
 });
 
+router.get("/logs", protect, adminOnly, async (req, res) => {
+  try {
+    const logs = await AdminLog.find()
+      .populate("admin_id", "fullName") // This brings in the Admin's Name
+      .sort({ timestamp: -1 });         // Newest first
+    res.json(logs);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching logs" });
+  }
+});
+
 // 2. USER MANAGEMENT
 router.get("/users", protect, adminOnly, async (req, res) => {
   try {
@@ -37,23 +49,40 @@ router.get("/users", protect, adminOnly, async (req, res) => {
 router.put("/users/:id/role", protect, adminOnly, async (req, res) => {
   try {
     const { role } = req.body;
-    const user = await User.findByIdAndUpdate(req.params.id, { role }, { new: true });
-    res.json(user);
+    const targetUser = await User.findById(req.params.id);
+    
+    await User.findByIdAndUpdate(req.params.id, { role });
+
+    
+    await new AdminLog({
+      action: `Updated ${targetUser.fullName} to ${role.toUpperCase()}`,
+      admin_id: req.user._id, 
+      target_id: targetUser._id
+    }).save();
+
+    res.json({ message: "Role updated and logged" });
   } catch (err) {
-    res.status(500).json({ message: "Role update failed" });
+    res.status(500).json({ message: "Update failed" });
   }
 });
 
 router.delete("/users/:id", protect, adminOnly, async (req, res) => {
   try {
-    await User.findByIdAndDelete(req.params.id);
+    const targetUser = await User.findByIdAndDelete(req.params.id);
+
+    await new AdminLog({
+      action: `Deleted ${targetUser.fullName}`,
+      admin_id: req.user._id, 
+      target_id: targetUser._id
+    }).save();
+
     res.json({ message: "User deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: "Delete failed" });
   }
 });
 
-// 3. COMPLAINT MANAGEMENT & VOLUNTEERS
+
 router.get("/volunteers", protect, adminOnly, async (req, res) => {
   try {
     const volunteers = await User.find({ role: "volunteer" }).select("fullName _id");
@@ -66,17 +95,37 @@ router.get("/volunteers", protect, adminOnly, async (req, res) => {
 router.put("/assign/:id", protect, adminOnly, async (req, res) => {
   try {
     const { volunteerId } = req.body;
+
+  
+    const volunteer = await User.findById(volunteerId);
+    if (!volunteer) {
+      return res.status(404).json({ message: "Volunteer not found" });
+    }
+
+   
     const complaint = await Complaint.findByIdAndUpdate(
       req.params.id,
       { assigned_to: volunteerId, status: "in_review" },
       { new: true }
     ).populate("assigned_to", "fullName");
+
+    if (!complaint) {
+      return res.status(404).json({ message: "Complaint not found" });
+    }
+
+    
+    await new AdminLog({
+      action: `Assigned complaint "${complaint.title}" to ${volunteer.fullName}`,
+      admin_id: req.user._id, 
+      target_id: volunteerId  
+    }).save();
+
     res.json(complaint);
   } catch (err) {
+    console.error("Assignment Error:", err);
     res.status(500).json({ message: "Assignment failed" });
   }
 });
-
 router.delete("/users/:id", protect, adminOnly, async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -85,9 +134,9 @@ router.delete("/users/:id", protect, adminOnly, async (req, res) => {
     const email = user.email;
     await User.findByIdAndDelete(req.params.id);
 
-    // Trigger mock email
+   
     console.log(`[ALERT] Automated email sent to: ${email}. Reason: Account deleted by Admin.`);
-    // Here you would integrate Nodemailer: await sendDeletionEmail(email);
+   
 
     res.json({ message: "User deleted successfully." });
   } catch (err) {
