@@ -62,8 +62,8 @@ const Profile = ({ user, setUser }) => {
   };
 
   return (
-    <div className="min-h-screenbg-gradient-to-br from-blue-100 to-blue-300 flex justify-center py-10">
-      <div className="bg-white shadow rounded-xl w-full max-w-3xl p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-blue-300 flex justify-center py-10">
+      <div className="bg-white shadow rounded-xl w-full max-w-3xl  h-full p-8">
 
         <div className="flex items-center gap-6 mb-8">
 

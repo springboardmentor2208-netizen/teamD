@@ -107,7 +107,7 @@ const Navbar = ({ user, onLogout }) => {
                   {user.role === "admin" && (
                     <button
                       onClick={() => {
-                        navigate("/admin");
+                        navigate("/admin-panel");
                         setProfileOpen(false);
                       }}
                       className="w-full text-left px-4 py-3 hover:bg-gray-100 transition"
@@ -158,7 +158,7 @@ const Navbar = ({ user, onLogout }) => {
           <Link to="/profile" onClick={() => setMenuOpen(false)}>Profile</Link>
 
           {user.role === "admin" && (
-            <Link to="/admin" onClick={() => setMenuOpen(false)}>Admin</Link>
+            <Link to="/admin-panel" onClick={() => setMenuOpen(false)}>Admin</Link>
           )}
 
         </div>
