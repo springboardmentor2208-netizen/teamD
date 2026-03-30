@@ -1,119 +1,99 @@
 const router = require("express").Router();
 const Complaint = require("../models/Complaint");
 const User = require("../models/User");
-const Admin = require("../models/Admin");
-const { protect, adminOnly } = require("../middleware/auth.js");
 const AdminLog = require("../models/AdminLog");
+const { protect, adminOnly } = require("../middleware/auth.js");
 
-// 1. DASHBOARD STATS (For the Bar Graph)
+// 1. DASHBOARD STATS
 router.get("/stats", protect, adminOnly, async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
     const received = await Complaint.countDocuments({ status: "received" });
     const inReview = await Complaint.countDocuments({ status: "in_review" });
     const resolved = await Complaint.countDocuments({ status: "resolved" });
-
-    res.json({
-      totalUsers,
-      totalComplaints: received + inReview + resolved,
-      received,
-      inReview,
-      resolved
-    });
-  } catch (err) {
-    res.status(500).json({ message: "Error fetching stats" });
-  }
+    res.json({ totalUsers, totalComplaints: received + inReview + resolved, received, inReview, resolved });
+  } catch (err) { res.status(500).json({ message: "Error fetching stats" }); }
 });
 
+// 2. FETCH LOGS
 router.get("/logs", protect, adminOnly, async (req, res) => {
   try {
-    const logs = await AdminLog.find()
-      .populate("admin_id", "fullName") // This brings in the Admin's Name
-      .sort({ timestamp: -1 });         // Newest first
+    const logs = await AdminLog.find().populate("admin_id", "fullName").sort({ timestamp: -1 });
     res.json(logs);
-  } catch (err) {
-    res.status(500).json({ message: "Error fetching logs" });
-  }
+  } catch (err) { res.status(500).json({ message: "Error fetching logs" }); }
 });
 
-// 2. USER MANAGEMENT
+// 3. USER MANAGEMENT
 router.get("/users", protect, adminOnly, async (req, res) => {
   try {
     const users = await User.find().select("-password").sort({ createdAt: -1 });
     res.json(users);
-  } catch (err) {
-    res.status(500).json({ message: "Error fetching users" });
-  }
+  } catch (err) { res.status(500).json({ message: "Error fetching users" }); }
 });
 
 router.put("/users/:id/role", protect, adminOnly, async (req, res) => {
   try {
     const { role } = req.body;
     const targetUser = await User.findById(req.params.id);
-    
-    await User.findByIdAndUpdate(req.params.id, { role });
+    if (!targetUser) return res.status(404).json({ message: "User not found" });
 
-    
+    // Update with returnDocument: 'after' to avoid Mongoose warnings
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, { role }, { returnDocument: 'after' });
+
     await new AdminLog({
       action: `Updated ${targetUser.fullName} to ${role.toUpperCase()}`,
       admin_id: req.user._id, 
       target_id: targetUser._id
     }).save();
 
-    res.json({ message: "Role updated and logged" });
-  } catch (err) {
-    res.status(500).json({ message: "Update failed" });
-  }
+    res.json(updatedUser);
+  } catch (err) { res.status(500).json({ message: "Update failed" }); }
 });
 
+// FIXED: Removed duplicate delete route and merged logic
 router.delete("/users/:id", protect, adminOnly, async (req, res) => {
   try {
-    const targetUser = await User.findByIdAndDelete(req.params.id);
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
 
+    const { email, fullName, _id } = user;
+    
+    // Log before deleting so we have the ID reference
     await new AdminLog({
-      action: `Deleted ${targetUser.fullName}`,
+      action: `Deleted account: ${fullName}`,
       admin_id: req.user._id, 
-      target_id: targetUser._id
+      target_id: _id
     }).save();
 
-    res.json({ message: "User deleted successfully" });
-  } catch (err) {
-    res.status(500).json({ message: "Delete failed" });
-  }
+    await User.findByIdAndDelete(req.params.id);
+    console.log(`[ALERT] Automated email sent to: ${email}. Reason: Account deleted by Admin.`);
+
+    res.json({ message: "User deleted successfully." });
+  } catch (err) { res.status(500).json({ message: "Delete operation failed" }); }
 });
 
-
+// 4. VOLUNTEER & ASSIGNMENT
 router.get("/volunteers", protect, adminOnly, async (req, res) => {
   try {
     const volunteers = await User.find({ role: "volunteer" }).select("fullName _id");
     res.json(volunteers);
-  } catch (err) {
-    res.status(500).json({ message: "Error fetching volunteers" });
-  }
+  } catch (err) { res.status(500).json({ message: "Error fetching volunteers" }); }
 });
 
 router.put("/assign/:id", protect, adminOnly, async (req, res) => {
   try {
     const { volunteerId } = req.body;
-
-  
     const volunteer = await User.findById(volunteerId);
-    if (!volunteer) {
-      return res.status(404).json({ message: "Volunteer not found" });
-    }
+    if (!volunteer) return res.status(404).json({ message: "Volunteer not found" });
 
-   
     const complaint = await Complaint.findByIdAndUpdate(
       req.params.id,
       { assigned_to: volunteerId, status: "in_review" },
-      { new: true }
+      { returnDocument: 'after' }
     ).populate("assigned_to", "fullName");
 
-    if (!complaint) {
-      return res.status(404).json({ message: "Complaint not found" });
-    }
+    if (!complaint) return res.status(404).json({ message: "Complaint not found" });
 
-    
     await new AdminLog({
       action: `Assigned complaint "${complaint.title}" to ${volunteer.fullName}`,
       admin_id: req.user._id, 
@@ -121,27 +101,7 @@ router.put("/assign/:id", protect, adminOnly, async (req, res) => {
     }).save();
 
     res.json(complaint);
-  } catch (err) {
-    console.error("Assignment Error:", err);
-    res.status(500).json({ message: "Assignment failed" });
-  }
-});
-router.delete("/users/:id", protect, adminOnly, async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-    if (!user) return res.status(404).json({ message: "User not found" });
-
-    const email = user.email;
-    await User.findByIdAndDelete(req.params.id);
-
-   
-    console.log(`[ALERT] Automated email sent to: ${email}. Reason: Account deleted by Admin.`);
-   
-
-    res.json({ message: "User deleted successfully." });
-  } catch (err) {
-    res.status(500).json({ message: "Delete operation failed" });
-  }
+  } catch (err) { res.status(500).json({ message: "Assignment failed" }); }
 });
 
 module.exports = router;

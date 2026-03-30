@@ -3,86 +3,111 @@ import { Link } from 'react-router-dom';
 
 const Home = () => {
     return (
-        <div className="flex flex-col bg-gradient-to-br from-blue-100 to-blue-300 min-h-screen">
-            {/* Hero Section */}
-            <header className="bg-blue-600 text-white flex-grow flex flex-col justify-center items-center text-center px-4 py-20 lg:py-32">
-                <div className="max-w-4xl mx-auto">
-                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6">
-                        Make Your City <span className="text-blue-200">Cleaner</span> & <span className="text-blue-200">Smarter</span>
-                    </h1>
-                    <p className="text-lg sm:text-xl md:text-2xl mb-10 text-blue-100 max-w-2xl mx-auto">
-                        Report civic issues, track progress, and help build a better community together.
-                    </p>
-                    <div className="flex flex-col sm:flex-row justify-center gap-4">
-                        <Link to="/report" className="bg-white text-blue-600 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 transition duration-300 transform hover:scale-105">
-                            + Report an Issue
-                        </Link>
-                        <Link to="/complaints" className="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-full hover:bg-white hover:text-blue-600 transition duration-300">
-                            View Reports
-                        </Link>
+        <div className="flex flex-col bg-[#f8fafc] min-h-screen font-sans">
+            
+            {/* HERO SECTION - Premium Slate Theme */}
+            <header className="bg-slate-950 text-white relative overflow-hidden py-24 lg:py-40 px-6">
+                <div className="max-w-7xl mx-auto relative z-10">
+                    <div className="flex flex-col items-center text-center">
+                        <span className="text-[10px] font-black uppercase tracking-[0.5em] text-blue-500 mb-6 animate-in fade-in slide-in-from-bottom-4">
+                            Civic Governance & Action
+                        </span>
+                        <h1 className="text-5xl sm:text-7xl md:text-8xl font-black italic tracking-tighter mb-8 leading-none">
+                            Clean<span className="text-blue-600">Street.</span>
+                        </h1>
+                        <p className="text-lg sm:text-xl text-slate-400 font-medium max-w-2xl mx-auto mb-12 leading-relaxed">
+                            A professional-grade portal for residents to report, track, and resolve community infrastructure issues in real-time.
+                        </p>
+                        
+                        <div className="flex flex-col sm:flex-row justify-center gap-6 w-full max-w-md">
+                            <Link to="/report" className="bg-blue-600 text-white font-black uppercase tracking-[0.2em] text-[11px] py-5 px-10 rounded-2xl shadow-2xl shadow-blue-900/40 hover:bg-blue-500 hover:-translate-y-1 transition-all text-center">
+                                + Initialize Report
+                            </Link>
+                            <Link to="/complaints" className="bg-slate-900 border border-slate-800 text-slate-300 font-black uppercase tracking-[0.2em] text-[11px] py-5 px-10 rounded-2xl hover:bg-slate-800 transition-all text-center">
+                                View Public Feed
+                            </Link>
+                        </div>
                     </div>
                 </div>
+
+                {/* Background Decorative Elements */}
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] -mr-40 -mt-40"></div>
+                <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-blue-900/20 rounded-full blur-[100px] -ml-20 -mb-20"></div>
             </header>
 
-            {/* How it Works Section */}
-            <section className="bg-white py-16 px-4 sm:px-6 lg:px-8">
+            {/* IMPACT STATS - Professional Minimalist */}
+            <section className="max-w-7xl mx-auto w-full px-6 -mt-16 relative z-20">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {[
+                        { label: "Community Uptime", val: "99.9%", desc: "Reliable reporting" },
+                        { label: "Issues Resolved", val: "1.2k+", desc: "Real-world impact" },
+                        { label: "Active Volunteers", val: "450+", desc: "Dedicated field staff" },
+                    ].map((stat, i) => (
+                        <div key={i} className="bg-white border border-slate-100 p-8 rounded-[2.5rem] shadow-xl">
+                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">{stat.label}</p>
+                            <h3 className="text-4xl font-black italic tracking-tighter text-slate-900 mb-1">{stat.val}</h3>
+                            <p className="text-xs font-bold text-blue-600 uppercase tracking-tighter">{stat.desc}</p>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* HOW IT WORKS - Step Cards */}
+            <section className="py-32 px-6">
                 <div className="max-w-7xl mx-auto">
-                    <div className="text-center mb-16">
-                        <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-                            How CleanStreet Works
-                        </h2>
-                        <p className="mt-4 text-xl text-gray-500">
-                            Simple steps to make a difference in your community
-                        </p>
+                    <div className="mb-20">
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 block mb-2">Protocol</span>
+                        <h2 className="text-4xl font-black text-slate-900 italic tracking-tighter">System Workflow</h2>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                         {/* Step 1 */}
-                        <div className="flex flex-col items-center">
-                            <div className="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 text-blue-600 mb-6">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                                </svg>
-                            </div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-2">Report Issues</h3>
-                            <p className="text-gray-600">
-                                Easily report civic problems with photos and location details
+                        <div className="group">
+                            <div className="text-5xl font-black italic text-slate-100 mb-6 group-hover:text-blue-50 transition-colors">01.</div>
+                            <h3 className="text-xl font-black text-slate-900 mb-4 uppercase tracking-tight">Identify & Capture</h3>
+                            <p className="text-slate-500 font-medium leading-relaxed">
+                                Document civic issues with precise GPS coordinates and visual evidence using our secure reporting tool.
                             </p>
                         </div>
 
                         {/* Step 2 */}
-                        <div className="flex flex-col items-center">
-                            <div className="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 text-blue-600 mb-6">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                </svg>
-                            </div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-2">Track Progress</h3>
-                            <p className="text-gray-600">
-                                Monitor the status of reported issues and see updates in real-time
+                        <div className="group">
+                            <div className="text-5xl font-black italic text-slate-100 mb-6 group-hover:text-blue-50 transition-colors">02.</div>
+                            <h3 className="text-xl font-black text-slate-900 mb-4 uppercase tracking-tight">Staff Assignment</h3>
+                            <p className="text-slate-500 font-medium leading-relaxed">
+                                Reports are instantly verified and dispatched to the nearest available volunteer for immediate review.
                             </p>
                         </div>
 
                         {/* Step 3 */}
-                        <div className="flex flex-col items-center">
-                            <div className="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 text-blue-600 mb-6">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
-                            </div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-2">Community Impact</h3>
-                            <p className="text-gray-600">
-                                Vote and comment on issues to help prioritize community needs
+                        <div className="group">
+                            <div className="text-5xl font-black italic text-slate-100 mb-6 group-hover:text-blue-50 transition-colors">03.</div>
+                            <h3 className="text-xl font-black text-slate-900 mb-4 uppercase tracking-tight">Resolution Sync</h3>
+                            <p className="text-slate-500 font-medium leading-relaxed">
+                                Track the progress from "Received" to "Resolved" with transparent updates and community feedback.
                             </p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* Footer (Optional simple footer) */}
-            <footer className="bg-gray-800 text-white py-8 text-center">
-                <p>&copy; {new Date().getFullYear()} CleanStreet. All rights reserved.</p>
+            {/* FINAL CTA */}
+            <section className="bg-white border-y border-slate-100 py-24 px-6 text-center">
+                <h2 className="text-3xl font-black text-slate-900 italic tracking-tight mb-8">Ready to transform your neighborhood?</h2>
+                <Link to="/register" className="inline-block bg-slate-950 text-white font-black uppercase tracking-[0.2em] text-[10px] py-5 px-12 rounded-2xl hover:bg-slate-800 transition-all shadow-xl">
+                    Join CleanStreet Today
+                </Link>
+            </section>
+
+            {/* FOOTER */}
+            <footer className="bg-slate-950 text-slate-500 py-12 px-6 border-t border-slate-900">
+                <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+                    <div className="text-center md:text-left">
+                        <span className="text-white font-black italic text-xl">CleanStreet.</span>
+                        <p className="text-[10px] uppercase font-bold tracking-widest mt-2">Professional Governance Portal</p>
+                    </div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest">&copy; {new Date().getFullYear()} All Rights Reserved | Devara Sai Satish</p>
+                </div>
             </footer>
         </div>
     );

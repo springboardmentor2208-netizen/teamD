@@ -1,0 +1,35 @@
+_______Users________
+
+email: user1@gmail.com
+password:user123
+
+email: user2@gmail.com
+password:user123
+
+email: user3@gmail.com
+password:user123
+
+email: user4@gmail.com
+password:user123
+
+email: user5@gmail.com
+password:user123
+
+
+_________________volunteer_______________
+
+
+email: volunteer1@gmail.com
+password:volunteer@123
+
+email: volunteer2@gmail.com
+password:volunteer@123
+
+email: volunteer3@gmail.com
+password:volunteer@123
+
+
+_____________Admin____________________
+
+email: admin@gmail.com
+password:Satish@123
