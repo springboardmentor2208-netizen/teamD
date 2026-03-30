@@ -103,12 +103,12 @@ const Register = () => {
             
             <div className="space-y-1">
               <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Full Name</label>
-              <input name="fullName" placeholder="enter your name here..." onChange={handleChange} className="w-full bg-slate-50 border-none p-4 rounded-2xl focus:ring-2 focus:ring-blue-500 font-bold text-slate-800 outline-none" required />
+              <input name="fullName" placeholder="Enter your name here..." onChange={handleChange} className="w-full bg-slate-50 border-none p-4 rounded-2xl focus:ring-2 focus:ring-blue-500 font-bold text-slate-800 outline-none" required />
             </div>
 
             <div className="space-y-1">
               <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Email Address</label>
-              <input name="email" type="email" placeholder="enter your email here..." onChange={handleChange} className="w-full bg-slate-50 border-none p-4 rounded-2xl focus:ring-2 focus:ring-blue-500 font-bold text-slate-800 outline-none" required />
+              <input name="email" type="email" placeholder="Enter your email here..." onChange={handleChange} className="w-full bg-slate-50 border-none p-4 rounded-2xl focus:ring-2 focus:ring-blue-500 font-bold text-slate-800 outline-none" required />
             </div>
 
             <div className="space-y-1">
@@ -118,7 +118,7 @@ const Register = () => {
 
             <div className="space-y-1">
               <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Location/City</label>
-              <input name="location" placeholder="enter your location here..." onChange={handleChange} className="w-full bg-slate-50 border-none p-4 rounded-2xl focus:ring-2 focus:ring-blue-500 font-bold text-slate-800 outline-none" required />
+              <input name="location" placeholder="Enter your location here..." onChange={handleChange} className="w-full bg-slate-50 border-none p-4 rounded-2xl focus:ring-2 focus:ring-blue-500 font-bold text-slate-800 outline-none" required />
             </div>
 
             <div className="space-y-1">
