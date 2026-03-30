@@ -9,53 +9,55 @@ const PhotoCarousel = ({ photos }) => {
   if (!photos || !Array.isArray(photos) || photos.length === 0) return null;
 
   return (
-    <div className="relative w-full h-56 md:h-64 rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-black group">
+    /* CHANGED: Height increased to h-[300px] (mobile) and md:h-[400px] (desktop) 
+       Also updated rounded corners to match the 2.5rem theme of the app */
+    <div className="relative w-full h-[300px] md:h-[400px] rounded-[2rem] overflow-hidden border border-slate-100 shadow-2xl bg-slate-950 group">
       <Swiper
         modules={[Pagination, Autoplay]}
         pagination={{ 
           clickable: true,
           dynamicBullets: true 
         }}
-        autoplay={{ delay: 3000, disableOnInteraction: false }}
-        className="h-full w-full mySwiper"
+        autoplay={{ delay: 4000, disableOnInteraction: false }}
+        className="h-full w-full cleanstreet-swiper"
       >
         {photos.map((url, index) => (
           <SwiperSlide key={index}>
-            <img
-              src={url}
-              alt="Evidence"
-              className="w-full h-full object-cover"
-            />
+            <div className="relative w-full h-full">
+              <img
+                src={url}
+                alt={`Evidence ${index + 1}`}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              {/* Subtle Dark Overlay for better text/bullet contrast */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 to-transparent pointer-events-none"></div>
+            </div>
           </SwiperSlide>
         ))}
       </Swiper>
 
-      {/* INTERNAL CSS TO FORCE VISIBILITY */}
+      {/* INTERNAL CSS UPDATED FOR PREMIUM THEME */}
       <style>{`
-        /* 1. Ensure the container exists and is visible */
-        .mySwiper .swiper-pagination {
-          bottom: 15px !important;
+        .cleanstreet-swiper .swiper-pagination {
+          bottom: 25px !important;
           z-index: 50 !important;
-          display: block !important;
-          visibility: visible !important;
         }
 
-        /* 2. Style the dots with a shadow so they show on white images */
-        .mySwiper .swiper-pagination-bullet {
+        .cleanstreet-swiper .swiper-pagination-bullet {
           background: #ffffff !important;
-          opacity: 0.7 !important;
-          width: 10px !important;
-          height: 10px !important;
-          margin: 0 5px !important;
-          box-shadow: 0 0 5px rgba(0,0,0,0.8) !important;
-          display: inline-block !important;
+          opacity: 0.5 !important;
+          width: 8px !important;
+          height: 8px !important;
+          margin: 0 6px !important;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
+          transition: all 0.3s ease !important;
         }
 
-        /* 3. Style the active dot */
-        .mySwiper .swiper-pagination-bullet-active {
-          background: #3b82f6 !important; /* Bright Blue */
+        .cleanstreet-swiper .swiper-pagination-bullet-active {
+          background: #2563eb !important; /* CleanStreet Blue */
           opacity: 1 !important;
-          transform: scale(1.2) !important;
+          width: 24px !important; /* Elongated active pill look */
+          border-radius: 10px !important;
         }
       `}</style>
     </div>
