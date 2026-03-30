@@ -88,13 +88,13 @@ const ReportComplaint = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] pb-20 bg-gradient-to-br from-blue-100 to-blue-300">
+    <div className="min-h-screen bg-[#f8fafc] pb-20 bg-gradient-to-br from-blue-300 to-blue-700">
       {/* Header Section */}
       <div className=" border-b border-slate-200 py-12 mb-10">
         <div className="max-w-6xl mx-auto px-6">
           <span className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-600 block mb-2">Issue Reporting</span>
           <h1 className="text-4xl font-black text-slate-900 tracking-tight italic">Create New Ticket</h1>
-          <p className="text-slate-400 font-medium mt-1 text-sm">Provide details and pin the exact location of the concern.</p>
+          <p className="text-slate-800 font-medium mt-1 text-sm">Provide details and pin the exact location of the concern.</p>
         </div>
       </div>
 
@@ -187,7 +187,7 @@ const ReportComplaint = () => {
               type="submit" 
               disabled={loading} 
               className={`w-full py-5 rounded-[2rem] font-black uppercase tracking-[0.3em] text-[11px] transition-all shadow-xl ${
-                loading ? "bg-slate-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700 text-white hover:-translate-y-1"
+                loading ? "bg-slate-400 cursor-not-allowed" : "bg-slate-800 hover:bg-slate-900 text-white hover:-translate-y-1"
               }`}
             >
               {loading ? "Processing Ticket..." : "Submit Official Report"}

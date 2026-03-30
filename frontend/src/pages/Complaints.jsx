@@ -125,7 +125,7 @@ const Complaints = () => {
   if (loading) return <div className="h-screen flex items-center justify-center font-bold text-blue-600">Updating Feed...</div>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-blue-300 py-10 px-4 md:px-10 font-sans">
+    <div className="min-h-screen bg-gradient-to-br from-blue-300 to-blue-700 py-10 px-4 md:px-10 font-sans">
       <div className="max-w-6xl mx-auto">
         
         {/* Header & Advanced Controls */}
@@ -169,7 +169,7 @@ const Complaints = () => {
             {filteredComplaints.map((c) => {
               const isMyComplaint = checkOwnership(c.user_id);
               return (
-                <div key={c._id} className={`group bg-white rounded-[2rem] shadow-xl flex flex-col h-full overflow-hidden transition-all hover:-translate-y-2 relative border-4 ${isMyComplaint ? "border-blue-400" : "border-transparent"}`}>
+                <div key={c._id} className={`group bg-white rounded-[2rem] shadow-xl flex flex-col h-full overflow-hidden transition-all hover:-translate-y-2 relative border-4 ${isMyComplaint ? "border-slate-700" : "border-transparent"}`}>
                   
                   {isMyComplaint && (
                     <button onClick={() => handleDeleteComplaint(c._id)} className="absolute top-4 right-4 bg-red-500 text-white p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity shadow-lg z-30">

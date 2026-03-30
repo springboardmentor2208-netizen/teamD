@@ -108,7 +108,7 @@ const AdminPanel = () => {
   if (loading) return <div className="h-screen flex items-center justify-center font-black text-blue-600 animate-pulse uppercase tracking-widest">Secure Admin Link...</div>;
 
   return (
-    <div className="min-h-screen bg-[#f9fafb] p-6 md:p-10 font-sans text-gray-900 bg-gradient-to-br from-blue-100 to-blue-300">
+    <div className="min-h-screen bg-[#f9fafb] p-6 md:p-10 font-sans text-gray-900 bg-gradient-to-br from-blue-300 to-blue-700">
       <div className="max-w-7xl mx-auto">
         
         {/* HEADER SECTION */}

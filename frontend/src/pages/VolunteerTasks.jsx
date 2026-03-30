@@ -49,7 +49,7 @@ const VolunteerTasks = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] pb-20 bg-gradient-to-br from-blue-100 to-blue-300">
+    <div className="min-h-screen bg-[#f8fafc] pb-20 bg-gradient-to-br from-blue-300 to-blue-700">
       {/* Header */}
       <div className=" border-b border-slate-200 py-10 mb-10">
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-end">

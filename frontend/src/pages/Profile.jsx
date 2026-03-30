@@ -79,7 +79,7 @@ const Profile = ({ user, setUser }) => {
   };
 
   return (
-    <div className="min-h-screen py-16 px-6 bg-gradient-to-br from-blue-100 to-blue-300">
+    <div className="min-h-screen py-16 px-6 bg-gradient-to-br from-blue-300 to-blue-700">
       <div className="max-w-3xl mx-auto bg-white rounded-[2.5rem] shadow-xl border border-slate-100 overflow-hidden">
         
         {/* Profile Header */}

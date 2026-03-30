@@ -34,7 +34,7 @@ const Login = ({ setUser }) => {
   };
 
   return (
-    <div className="min-h-screen  flex items-center justify-center p-6 bg-gradient-to-br from-blue-100 to-blue-300">
+    <div className="min-h-screen  flex items-center justify-center p-6 bg-gradient-to-br from-blue-300 to-blue-700">
       <div className="bg-white rounded-[3rem] shadow-2xl flex flex-col md:flex-row w-full max-w-4xl overflow-hidden border border-slate-100">
         
         {/* LEFT SIDE: BRANDING PANEL */}

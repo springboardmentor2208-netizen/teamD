@@ -55,13 +55,13 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen  pb-20 bg-gradient-to-br from-blue-100 to-blue-300">
+    <div className="min-h-screen  pb-20 bg-gradient-to-br from-blue-300 to-blue-700">
       <div className=" border-b border-slate-200 py-10 mb-8 ">
         <div className="max-w-7xl mx-auto px-6">
           <h1 className="text-4xl font-black text-slate-900 tracking-tight">
-            Welcome back, <span className="text-blue-600">{user ? user.fullName.split(' ')[0] : "User"}</span>
+            Welcome back, <span className="text-slate-900">{user ? user.fullName.split(' ')[0] : "User"}</span>
           </h1>
-          <p className="text-slate-400 font-medium mt-1">Here is an overview of your community reports.</p>
+          <p className="text-slate-600 font-medium mt-1">Here is an overview of your community reports.</p>
         </div>
       </div>
 
@@ -84,8 +84,8 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Recent Reports List */}
           <div className="lg:col-span-2">
-            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-6 flex items-center gap-2">
-              <span className="w-1 h-4 bg-blue-600 rounded-full"></span> Recent Activity
+            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-slate-900 mb-6 flex items-center gap-2">
+              <span className="w-1 h-4 bg-white rounded-full"></span> Recent Activity
             </h2>
             
             <div className="space-y-4">
@@ -127,7 +127,7 @@ const Dashboard = () => {
 
           {/* Sidebar Actions - Clean & Sharp */}
           <div className="space-y-6">
-            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">Quick Actions</h2>
+            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-slate-900">Quick Actions</h2>
             <div className="bg-slate-900 rounded-[2rem] p-8 shadow-2xl relative overflow-hidden">
               <h3 className="text-xl font-bold text-white mb-4 italic relative z-10">New Concern?</h3>
               <p className="text-slate-400 text-sm mb-6 relative z-10">Help improve the community by reporting issues instantly.</p>

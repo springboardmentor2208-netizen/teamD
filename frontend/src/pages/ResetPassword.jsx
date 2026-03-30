@@ -34,7 +34,7 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center p-6">
+    <div className="min-h-screen bg-[#f8fafc]  bg-gradient-to-br from-blue-300 to-blue-700 flex items-center justify-center p-6">
       <div className="bg-white rounded-[3rem] shadow-2xl flex flex-col md:flex-row w-full max-w-4xl overflow-hidden border border-slate-100">
         
         {/* LEFT SIDE: SECURITY BRANDING */}
