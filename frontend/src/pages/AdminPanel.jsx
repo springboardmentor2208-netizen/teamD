@@ -45,18 +45,18 @@ const AdminPanel = () => {
       try {
         const res = await API.put(`/admin/users/${userId}/role`, { role: newRole });
         
-        // --- ADD THIS LOGIC START ---
+        
         // Get the current logged-in user from localStorage
         const currentUser = JSON.parse(localStorage.getItem("user"));
         
         // Check if the ID of the user being changed matches the person currently logged in
         if (currentUser.id === userId || currentUser._id === userId) {
           alert("Your permissions have changed. Please log in again to update your panel.");
-          localStorage.clear(); // Clear the old 'admin' token and user data
-          window.location.href = "/login"; // Force redirect to login
+          localStorage.clear(); 
+          window.location.href = "/login"; 
           return;
         }
-        // --- ADD THIS LOGIC END ---
+        
 
         alert(`Role updated: ${userName} is now a ${newRole}.`);
         fetchInitialData();

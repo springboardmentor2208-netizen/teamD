@@ -9,8 +9,7 @@ const PhotoCarousel = ({ photos }) => {
   if (!photos || !Array.isArray(photos) || photos.length === 0) return null;
 
   return (
-    /* CHANGED: Height increased to h-[300px] (mobile) and md:h-[400px] (desktop) 
-       Also updated rounded corners to match the 2.5rem theme of the app */
+    
     <div className="relative w-full h-[300px] md:h-[400px] rounded-[2rem] overflow-hidden border border-slate-100 shadow-2xl bg-slate-950 group">
       <Swiper
         modules={[Pagination, Autoplay]}

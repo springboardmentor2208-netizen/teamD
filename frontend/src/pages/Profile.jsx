@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import API from "../api/axios"; // Use your configured axios instance
+import API from "../api/axios"; 
 
 const Profile = ({ user, setUser }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -15,7 +15,7 @@ const Profile = ({ user, setUser }) => {
   });
 
   useEffect(() => {
-    // 1. Initialize from prop/localStorage first for instant UI
+    
     if (user) {
       setProfileData({
         fullName: user.fullName || "",
@@ -55,7 +55,7 @@ const Profile = ({ user, setUser }) => {
       setLoading(true);
       const userId = user.id || user._id;
 
-      // Note: API instance already handles the Bearer Token via interceptors
+      
       const res = await API.put(`/auth/update-user/${userId}`, {
         fullName: profileData.fullName,
         phoneNumber: profileData.phoneNumber,
@@ -63,7 +63,7 @@ const Profile = ({ user, setUser }) => {
         profilePhoto: profileData.profilePhoto
       });
 
-      // 3. Sync everything
+      
       const updatedUser = { ...user, ...res.data };
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setUser(updatedUser);

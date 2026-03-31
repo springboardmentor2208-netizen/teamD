@@ -6,7 +6,7 @@ export default function ResetPassword() {
   const navigate = useNavigate();
   const location = useLocation();
   
-  // Retrieve email passed from the Forgot Password step
+  
   const [email] = useState(location.state?.email || ""); 
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");

@@ -14,7 +14,7 @@ export default function ForgotPassword() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // STEP 1: SEND OTP
+  
   const sendOTP = async (e) => {
     e.preventDefault();
     setLoading(true);

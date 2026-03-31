@@ -5,7 +5,7 @@ import PhotoCarousel from "../components/PhotoCarousel";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
-// Leaflet Icon Fixes
+
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
@@ -113,7 +113,7 @@ const Complaints = () => {
     return String(targetId) === String(currentId);
   };
 
-  // Helper for Status Badge Colors
+ 
   const getStatusStyle = (status) => {
     switch(status) {
       case 'resolved': return 'bg-green-100 text-green-700 border-green-200';

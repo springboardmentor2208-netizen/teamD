@@ -37,7 +37,7 @@ router.put("/users/:id/role", protect, adminOnly, async (req, res) => {
     const targetUser = await User.findById(req.params.id);
     if (!targetUser) return res.status(404).json({ message: "User not found" });
 
-    // Update with returnDocument: 'after' to avoid Mongoose warnings
+   
     const updatedUser = await User.findByIdAndUpdate(req.params.id, { role }, { returnDocument: 'after' });
 
     await new AdminLog({
