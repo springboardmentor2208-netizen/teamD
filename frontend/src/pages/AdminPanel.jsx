@@ -4,6 +4,8 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, 
   Tooltip, ResponsiveContainer, Cell 
 } from 'recharts';
+// You might need to install this: npm install xlsx
+import * as XLSX from 'xlsx'; 
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState("complaints"); 
@@ -11,14 +13,51 @@ const AdminPanel = () => {
   const [complaints, setComplaints] = useState([]);
   const [volunteers, setVolunteers] = useState([]);
   const [users, setUsers] = useState([]);
-  const [logs, setLogs] = useState([]); // NEW: Added logs state
+  const [logs, setLogs] = useState([]); 
   const [loading, setLoading] = useState(true);
+
+  // --- NEW: DOWNLOAD FUNCTION ---
+  const downloadReport = () => {
+    let dataToExport = [];
+    let fileName = `CleanStreet_${activeTab}_Report.xlsx`;
+
+    // Format data based on active tab
+    if (activeTab === "complaints") {
+      dataToExport = complaints.map(c => ({
+        Title: c.title,
+        Status: c.status,
+        Zone: c.zone || "N/A",
+        Address: c.address,
+        Assigned_To: c.assigned_to?.fullName || "Unassigned",
+        Created_At: new Date(c.createdAt).toLocaleDateString()
+      }));
+    } else if (activeTab === "users") {
+      dataToExport = users.map(u => ({
+        Name: u.fullName,
+        Email: u.email,
+        Role: u.role,
+        Zone: u.zone || "N/A",
+        Active_Tasks: u.activeTasks || 0
+      }));
+    } else {
+      dataToExport = logs.map(l => ({
+        Admin: l.admin_id?.fullName || "System",
+        Action: l.action,
+        Time: new Date(l.timestamp).toLocaleString()
+      }));
+    }
+
+    // Excel Logic
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Report");
+    XLSX.writeFile(workbook, fileName);
+  };
 
   useEffect(() => {
     fetchInitialData();
   }, []);
 
-  // FIXED: Consolidated fetch function to include Logs
   const fetchInitialData = async () => {
     try {
       setLoading(true);
@@ -26,12 +65,12 @@ const AdminPanel = () => {
         API.get("/complaints"), 
         API.get("/admin/volunteers"),
         API.get("/admin/users"),
-        API.get("/admin/logs") // NEW: Fetching logs
+        API.get("/admin/logs") 
       ]);
       setComplaints(compRes.data || []);
       setVolunteers(volRes.data || []);
       setUsers(userRes.data || []);
-      setLogs(logRes.data || []); // NEW: Setting logs
+      setLogs(logRes.data || []); 
     } catch (err) {
       console.error("Admin Load Error", err);
     } finally {
@@ -43,21 +82,14 @@ const AdminPanel = () => {
     const confirmChange = window.confirm(`Are you sure you want to change ${userName}'s role to ${newRole.toUpperCase()}?`);
     if (confirmChange) {
       try {
-        const res = await API.put(`/admin/users/${userId}/role`, { role: newRole });
-        
-        
-        // Get the current logged-in user from localStorage
+        await API.put(`/admin/users/${userId}/role`, { role: newRole });
         const currentUser = JSON.parse(localStorage.getItem("user"));
-        
-        // Check if the ID of the user being changed matches the person currently logged in
         if (currentUser.id === userId || currentUser._id === userId) {
           alert("Your permissions have changed. Please log in again to update your panel.");
           localStorage.clear(); 
           window.location.href = "/login"; 
           return;
         }
-        
-
         alert(`Role updated: ${userName} is now a ${newRole}.`);
         fetchInitialData();
       } catch (err) { 
@@ -82,21 +114,40 @@ const AdminPanel = () => {
     }
   };
 
-  const handleAssign = async (complaintId, volunteerId) => {
+ const handleAssign = async (complaintId, volunteerId) => {
     try {
-      await API.put(`/admin/assign/${complaintId}`, { volunteerId });
-      alert("Volunteer Assigned!");
+      // Changed status to 'in_review' to distinguish from 'assigned' (auto)
+      await API.put(`/admin/assign/${complaintId}`, { 
+        volunteerId, 
+        status: "in_review" 
+      });
+      alert("Admin Manual Assignment Successful!");
       fetchInitialData(); 
-    } catch (err) { alert("Assignment failed"); }
+    } catch (err) { 
+      alert("Assignment failed"); 
+    }
   };
 
+  
+  // Focused on Intake (Received) and Workload (Assigned)
   const chartData = [
-    { name: 'Received', count: complaints.filter(c => c.status === 'received').length, color: '#3b82f6' },
-    { name: 'In Review', count: complaints.filter(c => c.status === 'in_review').length, color: '#eab308' },
-    { name: 'Resolved', count: complaints.filter(c => c.status === 'resolved').length, color: '#22c55e' },
+    { 
+      name: 'Assigned (Auto)', 
+      count: complaints.filter(c => c.status === 'assigned').length, 
+      color: '#6366f1' // Indigo
+    },
+    { 
+      name: 'In Review (Admin)', 
+      count: complaints.filter(c => c.status === 'in_review').length, 
+      color: '#eab308' // Yellow
+    },
+    { 
+      name: 'Resolved', 
+      count: complaints.filter(c => c.status === 'resolved').length, 
+      color: '#22c55e' // Green
+    }
   ];
 
-  // Logic for filtered data based on current tab
   const getFilteredData = () => {
     const q = searchQuery.toLowerCase();
     if (activeTab === "complaints") return complaints.filter(c => c.title.toLowerCase().includes(q));
@@ -111,20 +162,30 @@ const AdminPanel = () => {
     <div className="min-h-screen bg-[#f9fafb] p-6 md:p-10 font-sans text-gray-900 bg-gradient-to-br from-blue-300 to-blue-700">
       <div className="max-w-7xl mx-auto">
         
-        {/* HEADER SECTION */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
           <div>
-            <h1 className="text-4xl font-black tracking-tighter italic">CleanStreet Admin</h1>
+            <h1 className="text-4xl font-black tracking-tighter italic text-white">CleanStreet Admin</h1>
           </div>
-          <input 
-            type="text" 
-            placeholder={`Search ${activeTab}...`} 
-            className="bg-white border-2 border-gray-100 rounded-2xl px-6 py-3 text-sm focus:border-black outline-none shadow-sm w-full md:w-80 transition-all font-medium"
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+          
+          <div className="flex items-center gap-4 w-full md:w-auto">
+            <input 
+              type="text" 
+              placeholder={`Search ${activeTab}...`} 
+              className="bg-white border-2 border-gray-100 rounded-2xl px-6 py-3 text-sm focus:border-black outline-none shadow-sm w-full md:w-80 transition-all font-medium"
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            {/* NEW: DOWNLOAD BUTTON */}
+            <button 
+              onClick={downloadReport}
+              className="bg-slate-900 text-white px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-black transition-all flex items-center gap-2 shadow-xl whitespace-nowrap"
+            >
+              <span>📥</span> Export Report
+            </button>
+          </div>
         </div>
 
-        {/* DYNAMIC STATS ROW */}
+        {/* ... Rest of your component (Stats, Tabs, and Table) remains exactly the same ... */}
+        
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
           <div className="lg:col-span-2 bg-white p-8 rounded-[2.5rem] shadow-xl border border-gray-50">
             <h2 className="text-[10px] font-black mb-6 uppercase tracking-widest text-gray-400">Resolution Analytics</h2>
@@ -154,7 +215,6 @@ const AdminPanel = () => {
           </div>
         </div>
 
-        {/* TAB NAVIGATION */}
         <div className="flex gap-3 mb-8 bg-white p-2 rounded-3xl w-fit shadow-sm border border-gray-50">
           {["complaints", "users", "logs"].map((tab) => (
             <button 
@@ -162,18 +222,17 @@ const AdminPanel = () => {
               onClick={() => setActiveTab(tab)}
               className={`px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === tab ? "bg-blue-600 text-white shadow-lg" : "text-gray-400 hover:bg-gray-50"}`}
             >
-              {tab === "users" ? "User Accounts" : tab}
+              {tab === "users" ? "Accounts" : tab}
             </button>
           ))}
         </div>
 
-        {/* CONTENT TABLE */}
         <div className="bg-white rounded-[2.5rem] shadow-xl border border-gray-50 overflow-hidden">
           <table className="w-full text-left">
             <thead className="bg-gray-50 text-[9px] font-black uppercase tracking-widest text-gray-400 border-b border-gray-100">
               <tr>
-                {activeTab === "complaints" && <><th className="p-7">Complaint</th><th className="p-7">Status</th><th className="p-7">Assigned To</th><th className="p-7 text-center">Update</th></>}
-                {activeTab === "users" && <><th className="p-7">Account Name</th><th className="p-7">Email</th><th className="p-7">Access Level</th><th className="p-7 text-center">Actions</th></>}
+                {activeTab === "complaints" && <><th className="p-7">Complaint / Zone</th><th className="p-7">Status</th><th className="p-7">Assigned To</th><th className="p-7 text-center">Update</th></>}
+                {activeTab === "users" && <><th className="p-7">Account / Workload</th><th className="p-7">Email / Zone</th><th className="p-7">Access Level</th><th className="p-7 text-center">Actions</th></>}
                 {activeTab === "logs" && <><th className="p-7">Admin</th><th className="p-7">Activity Description</th><th className="p-7">Timestamp</th></>}
               </tr>
             </thead>
@@ -183,8 +242,11 @@ const AdminPanel = () => {
                   {activeTab === "complaints" && (
                     <>
                       <td className="p-7">
-                        <p className="font-black text-gray-800 text-sm">{item.title}</p>
-                        <p className="text-[10px] text-gray-400 font-bold mt-1 uppercase tracking-tighter">📍 {item.address}</p>
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="font-black text-gray-800 text-sm">{item.title}</p>
+                          <span className="text-[8px] bg-slate-900 text-white px-2 py-0.5 rounded-full font-black uppercase">{item.zone || "No Zone"}</span>
+                        </div>
+                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">📍 {item.address}</p>
                       </td>
                       <td className="p-7">
                         <span className={`px-4 py-1.5 rounded-xl text-[9px] font-black uppercase border ${item.status === 'resolved' ? 'bg-green-50 text-green-600 border-green-100' : 'bg-blue-50 text-blue-600 border-blue-100'}`}>{item.status}</span>
@@ -192,22 +254,24 @@ const AdminPanel = () => {
                       <td className="p-7 text-[11px] font-bold text-gray-500 italic">{item.assigned_to?.fullName || "Awaiting Volunteer"}</td>
                       <td className="p-7 text-center">
                          <select onChange={(e) => handleAssign(item._id, e.target.value)} className="bg-gray-50 border-2 border-gray-100 text-[10px] font-black p-2 rounded-xl outline-none hover:border-blue-400 transition-all" defaultValue="">
-                            <option value="" disabled>Assign</option>
-                            {volunteers.map(v => <option key={v._id} value={v._id}>{v.fullName}</option>)}
+                            <option value="" disabled>Manual Assign</option>
+                            {volunteers.map(v => <option key={v._id} value={v._id}>{v.fullName} ({v.zone})</option>)}
                          </select>
                       </td>
                     </>
                   )}
                   {activeTab === "users" && (
                     <>
-                      <td className="p-7 font-black text-gray-800 text-sm">{item.fullName}</td>
-                      <td className="p-7 text-[11px] font-bold text-gray-400">{item.email}</td>
                       <td className="p-7">
-                        <select 
-                          value={item.role} 
-                          onChange={(e) => handleRoleChange(item._id, item.fullName, e.target.value)}
-                          className="text-[10px] font-black bg-white border-2 border-gray-200 rounded-xl px-3 py-1.5 outline-none hover:border-indigo-500 transition-all"
-                        >
+                        <p className="font-black text-gray-800 text-sm">{item.fullName}</p>
+                        {item.role === 'volunteer' && <p className="text-[9px] font-black text-amber-500 uppercase">🔥 {item.activeTasks || 0} active tasks</p>}
+                      </td>
+                      <td className="p-7">
+                        <p className="text-[11px] font-bold text-gray-400">{item.email}</p>
+                        {item.role === 'volunteer' && <p className="text-[9px] font-black text-blue-600 uppercase tracking-widest">{item.zone || "Not Set"}</p>}
+                      </td>
+                      <td className="p-7">
+                        <select value={item.role} onChange={(e) => handleRoleChange(item._id, item.fullName, e.target.value)} className="text-[10px] font-black bg-white border-2 border-gray-200 rounded-xl px-3 py-1.5 outline-none hover:border-indigo-500 transition-all">
                           <option value="user">User</option>
                           <option value="volunteer">Volunteer</option>
                           <option value="admin">Admin</option>

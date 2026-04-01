@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sendMail = require("../utils/sendMail");
 const sendOTP = require("../utils/sendOTP");
+const { protect } = require("../middleware/auth.js");
+
 router.post("/register", async (req, res) => {
   try {
     const {
@@ -100,18 +102,25 @@ router.get("/get-user/:id", async (req, res) => {
   res.json(user);
 });
 
-router.put("/update-user/:id", async (req, res) => {
+router.put("/update-user/:id", protect, async (req, res) => {
   try {
-    const { fullName, phoneNumber, location, profilePhoto } = req.body;
+    const { fullName, phoneNumber, location, profilePhoto, zone } = req.body;
 
-    const user = await User.findByIdAndUpdate(
+    const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
-      { fullName, phoneNumber, location, profilePhoto },
+      { 
+        fullName, 
+        phoneNumber, 
+        location, 
+        profilePhoto, 
+        zone 
+      },
       { new: true }
-    ).select("-password");
+    );
 
-    res.json(user);
+    if (!updatedUser) return res.status(404).json({ message: "User not found" });
 
+    res.json(updatedUser);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

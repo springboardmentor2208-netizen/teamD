@@ -5,7 +5,7 @@ import PhotoCarousel from "../components/PhotoCarousel";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
-
+// Fixing Leaflet marker icons
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
@@ -41,7 +41,6 @@ const Complaints = () => {
     fetchComplaints();
   }, [sortOrder]);
 
-  // Combined Filtering Logic: Search + Status
   useEffect(() => {
     let results = complaints.filter(c => 
       c.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -113,11 +112,12 @@ const Complaints = () => {
     return String(targetId) === String(currentId);
   };
 
- 
+  // UPDATED: Added "assigned" logic for Indigo styling
   const getStatusStyle = (status) => {
     switch(status) {
       case 'resolved': return 'bg-green-100 text-green-700 border-green-200';
       case 'in_review': return 'bg-yellow-100 text-yellow-700 border-yellow-200';
+      case 'assigned': return 'bg-indigo-100 text-indigo-700 border-indigo-200';
       default: return 'bg-blue-100 text-blue-700 border-blue-200';
     }
   };
@@ -128,12 +128,11 @@ const Complaints = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-300 to-blue-700 py-10 px-4 md:px-10 font-sans">
       <div className="max-w-6xl mx-auto">
         
-        {/* Header & Advanced Controls */}
         <div className="flex flex-col space-y-6 mb-10">
-          <div className="flex justify-between items-center">
-            <h1 className="text-4xl font-black text-gray-900 tracking-tight">Civic Feed</h1>
-            <div className="hidden md:block text-sm font-medium text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm">
-              Showing {filteredComplaints.length} reports
+          <div className="flex justify-between items-center text-white">
+            <h1 className="text-4xl font-black tracking-tight italic">Civic Feed</h1>
+            <div className="hidden md:block text-xs font-black bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/30">
+              {filteredComplaints.length} LIVE REPORTS
             </div>
           </div>
           
@@ -141,25 +140,26 @@ const Complaints = () => {
             <input 
               type="text" 
               placeholder="Search title or area..." 
-              className="md:col-span-2 px-5 py-3 border-none rounded-2xl text-sm outline-none focus:ring-2 focus:ring-blue-500 shadow-md transition-all"
+              className="md:col-span-2 px-5 py-3 border-none rounded-2xl text-sm outline-none focus:ring-4 focus:ring-blue-400 shadow-xl transition-all font-bold"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
 
+            {/* UPDATED: Values match Backend exactly: assigned, in_review, resolved */}
             <select 
-              className="px-4 py-3 border-none rounded-2xl text-sm bg-white outline-none focus:ring-2 focus:ring-blue-500 shadow-md font-bold text-gray-700 cursor-pointer"
+              className="px-4 py-3 border-none rounded-2xl text-sm bg-white outline-none focus:ring-4 focus:ring-blue-400 shadow-xl font-black text-gray-700 cursor-pointer appearance-none"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
             >
-              <option value="all">All Statuses</option>
-              <option value="received">Received</option>
-              <option value="in_review">In Review</option>
+              <option value="all">Global View</option>
+              <option value="assigned">Assigned (Auto)</option>
+              <option value="in_review">In Review (Admin)</option>
               <option value="resolved">Resolved</option>
             </select>
 
-            <div className="flex bg-white rounded-2xl p-1 shadow-md">
-              <button onClick={() => setViewMode("list")} className={`flex-1 py-2 text-sm font-black rounded-xl transition-all ${viewMode === "list" ? "bg-blue-600 text-white shadow-lg" : "text-gray-400"}`}>List</button>
-              <button onClick={() => setViewMode("map")} className={`flex-1 py-2 text-sm font-black rounded-xl transition-all ${viewMode === "map" ? "bg-blue-600 text-white shadow-lg" : "text-gray-400"}`}>Map</button>
+            <div className="flex bg-white/90 backdrop-blur-sm rounded-2xl p-1 shadow-xl">
+              <button onClick={() => setViewMode("list")} className={`flex-1 py-2 text-xs font-black rounded-xl transition-all uppercase tracking-widest ${viewMode === "list" ? "bg-slate-900 text-white shadow-lg" : "text-gray-400"}`}>List</button>
+              <button onClick={() => setViewMode("map")} className={`flex-1 py-2 text-xs font-black rounded-xl transition-all uppercase tracking-widest ${viewMode === "map" ? "bg-slate-900 text-white shadow-lg" : "text-gray-400"}`}>Map</button>
             </div>
           </div>
         </div>
@@ -169,7 +169,7 @@ const Complaints = () => {
             {filteredComplaints.map((c) => {
               const isMyComplaint = checkOwnership(c.user_id);
               return (
-                <div key={c._id} className={`group bg-white rounded-[2rem] shadow-xl flex flex-col h-full overflow-hidden transition-all hover:-translate-y-2 relative border-4 ${isMyComplaint ? "border-slate-700" : "border-transparent"}`}>
+                <div key={c._id} className={`group bg-white rounded-[2.5rem] shadow-2xl flex flex-col h-full overflow-hidden transition-all hover:-translate-y-2 relative border-4 ${isMyComplaint ? "border-slate-800" : "border-transparent"}`}>
                   
                   {isMyComplaint && (
                     <button onClick={() => handleDeleteComplaint(c._id)} className="absolute top-4 right-4 bg-red-500 text-white p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity shadow-lg z-30">
@@ -179,15 +179,23 @@ const Complaints = () => {
                     </button>
                   )}
 
-                  <div className="p-7 flex-grow">
-                    {isMyComplaint && <span className="inline-block bg-blue-600 text-white text-[9px] font-black px-3 py-1 rounded-lg mb-3 tracking-widest uppercase shadow-sm">Your Report</span>}
-                    
-                    <h2 className="font-extrabold text-gray-800 text-xl mb-2 line-clamp-1">{c.title}</h2>
-                    
-                    <div className="flex items-center gap-2 mb-5">
-                      <span className={`text-[10px] font-bold uppercase border px-3 py-1 rounded-full ${getStatusStyle(c.status)}`}>{c.status}</span>
-                      <button onClick={() => showOnMap(c.location_coords)} className="text-[11px] text-gray-400 hover:text-blue-600 transition-colors font-medium truncate max-w-[150px]">📍 {c.address}</button>
+                  <div className="p-8 flex-grow">
+                    <div className="flex justify-between items-center mb-4">
+                      {isMyComplaint ? (
+                        <span className="bg-blue-600 text-white text-[9px] font-black px-3 py-1 rounded-lg tracking-widest uppercase shadow-sm">Your Report</span>
+                      ) : (
+                        <span className="bg-slate-100 text-slate-500 text-[8px] font-black px-3 py-1 rounded-lg tracking-widest uppercase">{c.zone || "General"} Area</span>
+                      )}
+                      <span className={`text-[10px] font-black uppercase border px-3 py-1 rounded-xl ${getStatusStyle(c.status)}`}>
+                        {c.status.replace('_', ' ')}
+                      </span>
                     </div>
+                    
+                    <h2 className="font-black text-gray-900 text-xl mb-2 line-clamp-1 italic tracking-tight">{c.title}</h2>
+                    
+                    <button onClick={() => showOnMap(c.location_coords)} className="flex items-center gap-1 text-[11px] text-blue-500 hover:underline transition-colors font-black uppercase tracking-tighter truncate max-w-full mb-5">
+                      📍 {c.address}
+                    </button>
 
                     <p className="text-gray-500 text-sm mb-6 leading-relaxed line-clamp-3">"{c.description}"</p>
                     
@@ -197,7 +205,7 @@ const Complaints = () => {
                     </div>
 
                     {c.photos?.length > 0 && (
-                      <button onClick={() => setSelectedPhotos(c.photos)} className="w-full py-3 bg-gray-50 text-blue-600 text-xs font-bold rounded-2xl hover:bg-blue-50 transition-colors mb-6 flex justify-center items-center gap-2 border border-blue-100">
+                      <button onClick={() => setSelectedPhotos(c.photos)} className="w-full py-3 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-black transition-colors mb-6 shadow-lg">
                         📸 View Evidence ({c.photos.length})
                       </button>
                     )}
@@ -223,7 +231,7 @@ const Complaints = () => {
                           <input 
                             type="text" 
                             placeholder="Join discussion..." 
-                            className="flex-1 text-xs bg-gray-100 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-400 transition-all"
+                            className="flex-1 text-xs bg-gray-100 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-400 transition-all font-bold"
                             value={commentText[c._id] || ""}
                             onChange={(e) => setCommentText({...commentText, [c._id]: e.target.value})}
                           />
@@ -273,7 +281,6 @@ const Complaints = () => {
         )}
       </div>
 
-      {/* Photo Overlay Modal */}
       {selectedPhotos && (
         <div className="fixed inset-0 bg-gray-900/90 z-[9999] flex items-center justify-center p-6 backdrop-blur-md" onClick={() => setSelectedPhotos(null)}>
           <div className="relative w-full max-w-5xl bg-white rounded-[3rem] overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>

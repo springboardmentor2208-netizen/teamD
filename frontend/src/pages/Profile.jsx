@@ -11,11 +11,14 @@ const Profile = ({ user, setUser }) => {
     phoneNumber: "",
     location: "",
     role: "",
-    profilePhoto: ""
+    profilePhoto: "",
+    zone: "" // ADDED: To track volunteer zone
   });
 
+  // Constant list of zones to match your other pages
+  const ZONES = ["North", "South", "East", "West", "Central"];
+
   useEffect(() => {
-    
     if (user) {
       setProfileData({
         fullName: user.fullName || "",
@@ -23,11 +26,11 @@ const Profile = ({ user, setUser }) => {
         phoneNumber: user.phoneNumber || "",
         location: user.location || "",
         role: user.role || "",
-        profilePhoto: user.profilePhoto || ""
+        profilePhoto: user.profilePhoto || "",
+        zone: user.zone || "" // ADDED
       });
     }
 
-    // 2. Fetch fresh data from backend
     const fetchUser = async () => {
       if (!user?.id && !user?._id) return;
       const userId = user.id || user._id;
@@ -55,15 +58,15 @@ const Profile = ({ user, setUser }) => {
       setLoading(true);
       const userId = user.id || user._id;
 
-      
+      // UPDATED: Now sending 'zone' in the update request
       const res = await API.put(`/auth/update-user/${userId}`, {
         fullName: profileData.fullName,
         phoneNumber: profileData.phoneNumber,
         location: profileData.location,
-        profilePhoto: profileData.profilePhoto
+        profilePhoto: profileData.profilePhoto,
+        zone: profileData.zone // ADDED
       });
 
-      
       const updatedUser = { ...user, ...res.data };
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setUser(updatedUser);
@@ -72,7 +75,7 @@ const Profile = ({ user, setUser }) => {
       alert("Profile updated successfully!");
     } catch (err) {
       console.error("Update failed:", err.response?.data || err.message);
-      alert(err.response?.data?.message || "Update failed. Check if your role allows this.");
+      alert(err.response?.data?.message || "Update failed.");
     } finally {
       setLoading(false);
     }
@@ -86,12 +89,13 @@ const Profile = ({ user, setUser }) => {
         <div className="bg-slate-900 p-10 text-white flex flex-col md:flex-row items-center gap-8">
           <div className="relative">
             <img
-              src={profileData.profilePhoto || "https://i.pravatar.cc/150"}
+              src={profileData.profilePhoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(profileData.fullName)}&background=2563eb&color=fff`}
               alt="avatar"
               className="w-32 h-32 rounded-[2rem] object-cover border-4 border-slate-800 shadow-2xl"
+              onError={(e) => { e.target.src = "https://i.pravatar.cc/150"; }}
             />
             {isEditing && (
-              <div className="absolute -bottom-2 -right-2 bg-blue-600 p-2 rounded-xl text-xs font-black uppercase">
+              <div className="absolute -bottom-2 -right-2 bg-blue-600 p-2 rounded-xl text-[8px] font-black uppercase tracking-tighter shadow-lg">
                 Edit Mode
               </div>
             )}
@@ -102,9 +106,17 @@ const Profile = ({ user, setUser }) => {
               {profileData.fullName || "User Name"}
             </h2>
             <p className="text-slate-400 font-bold text-sm mb-4">{profileData.email}</p>
-            <span className="text-[10px] font-black bg-blue-600 text-white px-4 py-1.5 rounded-xl uppercase tracking-widest">
-              {profileData.role} Access
-            </span>
+            <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+              <span className="text-[10px] font-black bg-blue-600 text-white px-4 py-1.5 rounded-xl uppercase tracking-widest">
+                {profileData.role} Access
+              </span>
+              {/* NEW: Zone Badge for header */}
+              {profileData.role === "volunteer" && profileData.zone && (
+                <span className="text-[10px] font-black bg-amber-500 text-black px-4 py-1.5 rounded-xl uppercase tracking-widest shadow-lg">
+                  {profileData.zone} Zone
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -132,6 +144,23 @@ const Profile = ({ user, setUser }) => {
               />
             </div>
 
+            {/* NEW: DYNAMIC ZONE SELECTION FOR VOLUNTEERS */}
+            {profileData.role === "volunteer" && (
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-[10px] font-black uppercase tracking-widest text-amber-600 ml-2">Operational Zone</label>
+                <select
+                  name="zone"
+                  disabled={!isEditing}
+                  value={profileData.zone}
+                  onChange={handleChange}
+                  className={`w-full p-4 rounded-2xl font-bold transition-all appearance-none ${isEditing ? "bg-amber-50 border-amber-100 border-2" : "bg-slate-50 border-transparent cursor-not-allowed"}`}
+                >
+                  <option value="">No Zone Assigned</option>
+                  {ZONES.map(z => <option key={z} value={z}>{z} Region</option>)}
+                </select>
+              </div>
+            )}
+
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Phone Number</label>
               <input
@@ -139,7 +168,6 @@ const Profile = ({ user, setUser }) => {
                 disabled={!isEditing}
                 value={profileData.phoneNumber}
                 onChange={handleChange}
-                placeholder="Ex: +91 98765 43210"
                 className={`w-full p-4 rounded-2xl font-bold transition-all ${isEditing ? "bg-slate-50 border-blue-100 border-2" : "bg-white border-transparent"}`}
               />
             </div>
@@ -151,7 +179,7 @@ const Profile = ({ user, setUser }) => {
                 disabled={!isEditing}
                 value={profileData.location}
                 onChange={handleChange}
-                className={`w-full p-4 rounded-2xl font-bold transition-all ${isEditing ? "bg-slate-50 border-blue-100 border-2" : "bg-white border-transparent"}`}
+                className={`[text-wrap:wrap] w-full p-4 rounded-2xl font-bold transition-all ${isEditing ? "bg-slate-50 border-blue-100 border-2" : "bg-white border-transparent"}`}
               />
             </div>
 

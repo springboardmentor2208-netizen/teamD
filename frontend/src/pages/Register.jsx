@@ -10,6 +10,7 @@ const Register = () => {
     email: "",
     phoneNumber: "",
     location: "",
+    zone: "", // ADDED: For zone assignment
     password: "",
     role: "user",
     secretKey: "",
@@ -17,6 +18,9 @@ const Register = () => {
   });
 
   const [loading, setLoading] = useState(false);
+
+  // List of available zones
+  const ZONES = ["North", "South", "East", "West", "Central"];
 
   const handleChange = (e) => {
     setFormData(prev => ({
@@ -30,11 +34,15 @@ const Register = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const { fullName, email, password, location, phoneNumber, role, secretKey } = formData;
+    const { fullName, email, password, location, phoneNumber, role, secretKey, zone } = formData;
 
-    // --- FORM VALIDATION ---
     if (!fullName || !email || !password || !location) {
       alert("Please enter all required fields.");
+      return;
+    }
+    // ADDED: Validate zone for volunteers
+    if (role === "volunteer" && !zone) {
+      alert("Please select an operational zone.");
       return;
     }
     if (!validateEmail(email)) {
@@ -84,7 +92,6 @@ const Register = () => {
               Create your official resident or staff identity to begin reporting and resolving community issues.
             </p>
           </div>
-          {/* Decorative Glow */}
           <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-blue-600/20 rounded-full blur-3xl"></div>
         </div>
 
@@ -134,11 +141,22 @@ const Register = () => {
             <div className="space-y-1 md:col-span-2">
               <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">Identify As</label>
               <select name="role" onChange={handleChange} className="w-full bg-slate-50 border-none p-4 rounded-2xl focus:ring-2 focus:ring-blue-500 font-bold text-slate-800 appearance-none outline-none cursor-pointer">
-                <option value="user">user</option>
+                <option value="user">User</option>
                 <option value="volunteer">Volunteer</option>
                 <option value="admin">Administrator</option>
               </select>
             </div>
+
+            {/* ADDED: Dynamic Zone Selector for Volunteers */}
+            {formData.role === "volunteer" && (
+              <div className="space-y-1 md:col-span-2 animate-in slide-in-from-top-2">
+                <label className="text-[10px] font-black uppercase tracking-widest text-amber-600 ml-2">Select Operation Zone</label>
+                <select name="zone" onChange={handleChange} className="w-full bg-amber-50 border-none p-4 rounded-2xl focus:ring-2 focus:ring-amber-500 font-bold text-slate-800 outline-none cursor-pointer">
+                   <option value="">Select Zone</option>
+                   {ZONES.map(z => <option key={z} value={z}>{z} Region</option>)}
+                </select>
+              </div>
+            )}
 
             {formData.role === "admin" && (
               <div className="space-y-1 md:col-span-2 animate-in slide-in-from-top-2 duration-300">

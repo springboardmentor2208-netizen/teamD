@@ -8,7 +8,9 @@ const complaintSchema = new mongoose.Schema({
   location_coords: { lat: Number, lng: Number },
   address: String,
   assigned_to: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
-  status: { type: String, enum: ["received", "in_review", "resolved"], default: "received" },
+  // ONLY ADDED "assigned" HERE:
+  status: { type: String, enum: ["received", "assigned", "in_review", "resolved"], default: "assigned" },
+  zone: { type: String, required: true },
   remarks: { type: String, default: "" }
 }, { 
   timestamps: true,

@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema({
   password: String,
   role: { type: String, default: "user" },
   profilePhoto: String,
-
+  zone: { type: String, default: "General" }, 
+  activeTasks: { type: Number, default: 0 },
   resetOTP: String,
   resetOTPExpire: Date
 
