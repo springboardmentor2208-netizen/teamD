@@ -1,0 +1,6 @@
+PORT=8000
+MONGO_URI=your_mongodb_key
+JWT_SECRET=secret123
+ADMIN_SECRET=ADMIN123
+EMAIL_USER=sd1761256@gmail.com
+EMAIL_PASS=nupi chxl buyg ygpf
